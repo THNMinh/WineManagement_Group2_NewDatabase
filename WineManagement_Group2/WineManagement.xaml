@@ -1,0 +1,126 @@
+﻿<Window x:Class="WineWarehouseManagement.WineManagement"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WineWarehouseManagement"
+        mc:Ignorable="d"
+        Title="WineManagement" Height="450" Width="800">
+    <Grid>
+        <TabControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <TabControl.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FFB0E696"/>
+                    <GradientStop Color="#FF00FFD0" Offset="1"/>
+                </LinearGradientBrush>
+            </TabControl.Background>
+            <!-- Staff Tab -->
+            <TabItem Header="Manage Wine">
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Left">
+                        <TextBlock Text="Wine Name:" VerticalAlignment="Center" Margin="5" />
+                        <TextBox x:Name="WineNameTextBox" Width="200" Margin="5" Height="20" />
+                        <TextBlock Text="Vintage year:" VerticalAlignment="Center" Margin="5" />
+                        <TextBox x:Name="VintageYearTextBox" Width="216" Margin="5" Height="18" />
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Left" Margin="0,0,0,5">
+                        <TextBlock Text="Price:" VerticalAlignment="Center" Margin="5" />
+                        <PasswordBox x:Name="PriceBox" Width="236" Margin="5" Height="18" />
+                        <TextBlock Text="Alcohol Content:" VerticalAlignment="Center" Margin="5" />
+                        <PasswordBox x:Name="AlcoholContentBox" Width="196" Margin="5" Height="20" />
+                    </StackPanel>
+                    
+                    <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Left" Margin="0,0,0,290">
+                        
+                        <TextBlock Text="CategoryID:" VerticalAlignment="Center" Margin="5" />
+                        <ComboBox x:Name="CategoryComboBox" Width="224" Margin="5">
+                            <ComboBoxItem Content="Staff" />
+                            <ComboBoxItem Content="Manager" />
+                            <ComboBoxItem Content="Admin" />
+                        </ComboBox>
+                    </StackPanel>
+
+                    <!-- CRUD Buttons -->
+                    <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Center" Margin="0,36,0,227">
+                        <Button Content="Read" Width="100" Margin="10" Click="ReadWineButton_Click"/>
+                        <Button Content="Create" Width="100" Margin="10" Click="CreateWineButton_Click"/>
+                        <Button Content="Update" Width="100" Margin="10" Click="UpdateWineButton_Click"/>
+                        <Button Content="Delete" Width="100" Margin="10" Click="DeleteWineButton_Click"/>
+                    </StackPanel>
+
+                    <!-- Data Grid for Staff -->
+                    <DataGrid x:Name="StaffDataGrid" Grid.Row="2" Margin="10,115,10,10" AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False" SelectionMode="Single">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Wine ID" Binding="{Binding WineId}" Width="Auto" />
+                            <DataGridTextColumn Header="Wine Name" Binding="{Binding Name}" Width="*" />
+                            <DataGridTextColumn Header="Vintage year" Binding="{Binding VintageYear}" Width="*" />
+                            <DataGridTextColumn Header="Alcohol content" Binding="{Binding AlcoholContent}" Width="*" />
+                            <DataGridTextColumn Header="Price" Binding="{Binding Price}" Width="*" />
+                            <DataGridTextColumn Header="Category ID" Binding="{Binding CategoryId}" Width="*" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    
+                </Grid>
+            </TabItem>
+
+            <!-- Manager Tab -->
+            <TabItem Header="Manage Manager">
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Left">
+                        <TextBlock Text="Manager Name:" VerticalAlignment="Center" Margin="5" />
+                        <TextBox x:Name="ManagerNameTextBox" Width="200" Margin="5" />
+                        <TextBlock Text="Manager Email:" VerticalAlignment="Center" Margin="5" />
+                        <TextBox x:Name="ManagerEmailTextBox" Width="200" Margin="5" />
+
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Left">
+                        <TextBlock Text="Password:" VerticalAlignment="Center" Margin="5" />
+                        <TextBox x:Name="ManagerPasswordTextBox" Width="200" Margin="5" />
+                        <TextBlock Text="Role:" VerticalAlignment="Center" Margin="5" />
+                        <ComboBox x:Name="ManagerRoleComboBox" Width="200" Margin="5">
+                            <ComboBoxItem Content="Staff" />
+                            <ComboBoxItem Content="Manager" />
+                            <ComboBoxItem Content="Admin" />
+                        </ComboBox>
+                    </StackPanel>
+
+                    <!-- CRUD Buttons -->
+                    <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Center" Margin="0,10,0,247">
+                        <Button Content="Read" Width="100" Margin="10" Click="ReadManagerButton_Click"/>
+                        <Button Content="Create" Width="100" Margin="10" Click="CreateManagerButton_Click"/>
+                        <Button Content="Update" Width="100" Margin="10" Click="UpdateManagerButton_Click"/>
+                        <Button Content="Delete" Width="100" Margin="10" Click="DeleteManagerButton_Click"/>
+                    </StackPanel>
+
+                    <!-- Data Grid for Manager -->
+                    <DataGrid x:Name="ManagerDataGrid" Grid.Row="2" Margin="10,84,10,10" AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False" SelectionMode="Single">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Manager ID" Binding="{Binding AccountId}" Width="Auto" />
+                            <DataGridTextColumn Header="Manager Name" Binding="{Binding Username}" Width="*" />
+                            <DataGridTextColumn Header="Password" Binding="{Binding PasswordHash}" Width="*" />
+                            <DataGridTextColumn Header="Manager Email" Binding="{Binding Email}" Width="*" />
+                            <DataGridTextColumn Header="Role" Binding="{Binding Role}" Width="*" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+        </TabControl>
+        <Button Content="Logout" Click="LogoutButton_Click" Margin="664,34,10,352"/>
+
+    </Grid>
+</Window>

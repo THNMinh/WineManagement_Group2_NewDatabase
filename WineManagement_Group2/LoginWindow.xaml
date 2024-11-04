@@ -1,0 +1,61 @@
+﻿<Window x:Class="WineWarehouseManagement.LoginWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WineWarehouseManagement"
+        mc:Ignorable="d"
+        Title="Login" Height="340" Width="428" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+    <Window.Background>
+        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+            <GradientStop Color="#FF282063"/>
+            <GradientStop Color="#FF9480E8" Offset="1"/>
+        </LinearGradientBrush>
+    </Window.Background>
+    <Grid Margin="0,0,-24,42">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="83*" />
+            <ColumnDefinition Width="19*"/>
+            <ColumnDefinition Width="202*" />
+            <ColumnDefinition Width="101*" />
+        </Grid.ColumnDefinitions>
+
+        <!-- Label for Username -->
+        <Label Grid.Column="0" Content="Login here" FontSize="20" FontWeight="Bold" 
+               Foreground="AntiqueWhite" HorizontalAlignment="Left" VerticalAlignment="Top" 
+               Margin="8,21,0,0" Grid.ColumnSpan="3" Height="42" Width="150" />
+
+        <Label Grid.Row="1" Grid.Column="0" Content="Email:" 
+               Foreground="#FFBCD9F1" HorizontalAlignment="Right" VerticalAlignment="Top" 
+               Margin="0,23,2,0" Height="26" Width="66" FontWeight="SemiBold"/>
+        <TextBox x:Name="EmailTextBox" Grid.Row="1" Grid.Column="2" 
+                 Background="#ECF0F1" BorderBrush="#2980B9" BorderThickness="1" 
+                 Width="224" Height="25" HorizontalAlignment="Center" VerticalAlignment="Center" />
+
+        <!-- Label for Password -->
+        <Label Grid.Row="2" Grid.Column="0" Content="Password:" 
+               Foreground="#FFBCD9F1" HorizontalAlignment="Right" VerticalAlignment="Top" 
+               Margin="0,23,2,0" Height="25" Width="62" FontWeight="SemiBold"/>
+        <PasswordBox x:Name="PasswordBox" Grid.Row="2" Grid.Column="2" 
+                     Background="#ECF0F1" BorderBrush="#2980B9" BorderThickness="1" 
+                     Width="222" Height="25" HorizontalAlignment="Center" VerticalAlignment="Center" />
+
+        <!-- Buttons -->
+        <StackPanel Grid.Row="3" Grid.Column="2" Orientation="Horizontal" 
+                    HorizontalAlignment="Center" VerticalAlignment="Top" 
+                    RenderTransformOrigin="0.493,0.477" Margin="0,7,0,0" Height="30" Width="170">
+            <Button Content="Login" Width="75" Margin="5" Foreground="White" 
+                    Background="#27AE60" BorderBrush="#27AE60" Click="LoginButton_Click" />
+            <Button Content="Cancel" Width="75" Margin="5" Foreground="White" 
+                    Background="#E74C3C" BorderBrush="#E74C3C" Click="CancelButton_Click" />
+        </StackPanel>
+    </Grid>
+</Window>

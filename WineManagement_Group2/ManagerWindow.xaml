@@ -1,0 +1,80 @@
+﻿<Window x:Class="WineWarehouseManagement.ManagerWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WineWarehouseManagement"
+        mc:Ignorable="d"
+        Title="Staff Management for Manager
+" Height="450" Width="600" WindowStartupLocation="CenterScreen">
+    <Window.Background>
+        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+            <GradientStop Color="#FFD4FF00"/>
+            <GradientStop Color="#FF9CDEC6" Offset="1"/>
+        </LinearGradientBrush>
+    </Window.Background>
+
+    <Grid Margin="10">
+        <!-- Layout Definition -->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <!-- Staff Name -->
+        <Label Grid.Row="0" Grid.Column="0" Content="Staff Name:" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
+        <TextBox x:Name="StaffNameTextBox" Grid.Row="0" Grid.Column="1" Width="200" Margin="5"/>
+
+        <!-- Staff Email -->
+        <Label Grid.Row="1" Grid.Column="0" Content="Staff Email:" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
+        <TextBox x:Name="StaffEmailTextBox" Grid.Row="1" Grid.Column="1" Width="200" Margin="5"/>
+
+        <!-- Phone -->
+        <Label Grid.Row="2" Grid.Column="0" Content="Password:" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
+        <PasswordBox x:Name="StaffPasswordBox" Grid.Row="2" Grid.Column="1" Width="200" Margin="5"/>
+
+        <!-- Address -->
+        <Label Grid.Row="3" Grid.Column="0" Content="Role:" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
+
+        <ComboBox x:Name="StaffRoleComboBox" Grid.Row="3" Grid.Column="1"  Width="200" Margin="5">
+            <ComboBoxItem Content="Staff" />
+            <ComboBoxItem Content="Manager" />
+
+        </ComboBox>
+
+        <!-- CRUD Buttons -->
+        <StackPanel Grid.Row="4" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
+
+            <Button Content="Update" Width="80" Margin="5" Click="UpdateButton_Click" Background="#FF00A2FF"/>
+            <Button Content="Create" Width="80" Margin="5" Click="CreateButton_Click" Background="#FF00FF22"/>
+            <Button Content="Delete" Width="80" Margin="5" Click="DeleteButton_Click" Background="#FFFF4C00"/>
+            <Button Content="Read" Width="80" Margin="5" Click="ReadButton_Click" Background="#FFC013FF" />
+
+        </StackPanel>
+
+        <!-- DataGrid for displaying staff -->
+        <DataGrid x:Name="StaffDataGrid" Grid.Row="5" Grid.ColumnSpan="2" AutoGenerateColumns="False" CanUserAddRows="False" Margin="5" IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Staff ID" Binding="{Binding AccountId}" Width="Auto" />
+                <DataGridTextColumn Header="Staff Name" Binding="{Binding Username}" Width="*" />
+                <DataGridTextColumn Header="Password" Binding="{Binding PasswordHash}" Width="*" />
+                <DataGridTextColumn Header="Staff Email" Binding="{Binding Email}" Width="*" />
+                <DataGridTextColumn Header="Role" Binding="{Binding Role}" Width="*" />
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <!-- Save Changes Button -->
+        <Button Grid.Row="6" Grid.ColumnSpan="2" Content="Back to Manager Page" Width="181" Margin="0,10,0,10" HorizontalAlignment="Center" Click="LogoutButton_Click" Background="#FFB2FF60" BorderBrush="#FFDA9393" Foreground="Black"/>
+        <Button Content="Log Out" Width="100" Margin="389,5,0,11" HorizontalAlignment="Left" Click="LogoutButton_Click" Background="#FF5AFF94" BorderBrush="#FFDA9393" Foreground="Black" Grid.Column="1"/>
+    </Grid>
+</Window>

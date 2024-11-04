@@ -1,0 +1,84 @@
+﻿<Window x:Class="WineWarehouseManagement.RequestDetailWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WineWarehouseManagement"
+        mc:Ignorable="d"
+        Title="Staff - Request Management" Height="544" Width="850" WindowStartupLocation="CenterScreen">
+    <Grid Margin="0,0,3,5">
+        <Grid.Background>
+            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                <GradientStop Color="#FFFF9100"/>
+                <GradientStop Color="#FFBDFF00" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="450*" />
+            <ColumnDefinition Width="397*" />
+        </Grid.ColumnDefinitions>
+
+        <!-- Title -->
+        <Label Content="Wine Management" FontSize="24" FontWeight="Bold" HorizontalAlignment="Left" Grid.ColumnSpan="2" Margin="311,0,0,404" Grid.RowSpan="2" Width="225" />
+
+        <!-- Form Inputs -->
+        <StackPanel Grid.Row="1" Grid.Column="0" Margin="18,124,21,0" VerticalAlignment="Top" Height="243">
+            <!-- Wine Name -->
+            <StackPanel Orientation="Horizontal" Margin="5">
+                <Label Content="Wine Name:" Width="100" VerticalAlignment="Center"/>
+                <ComboBox x:Name="WineNameComboBox" Width="200"/>
+            </StackPanel>
+
+            <!-- Quantity -->
+            <StackPanel Orientation="Horizontal" Margin="5">
+                <Label Content="Quantity:" Width="100" VerticalAlignment="Center"/>
+                <TextBox x:Name="QuantityTextBox" Width="200"/>
+            </StackPanel>
+
+            <!-- Origin -->
+
+            <!-- Category (ComboBox) -->
+
+            <!-- Buttons -->
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
+                <Button Content="Add" Width="75" Margin="10" Click="AddButton_Click" Background="#FF00FFF3"/>
+                <Button Content="Update" Width="75" Margin="10" Click="UpdateButton_Click" Background="#FF48FF00"/>
+                <Button Content="Delete" Width="75" Margin="10" Click="DeleteButton_Click" Background="#FFFF5700"/>
+            </StackPanel>
+        </StackPanel>
+
+        <!-- DataGrid for Wine List -->
+        <TabControl Margin="10,96,0,31" Grid.Row="1" Grid.Column="1">
+            <TabItem Header="Wines">
+                <DataGrid x:Name="WinesDataGrid" Grid.Row="1" Grid.Column="1" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True" SelectionMode="Single">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Wine Name" Binding="{Binding Name}" Width="*" />
+                        <DataGridTextColumn Header="Vintage Year" Binding="{Binding VintageYear}" Width="Auto" />
+                        <DataGridTextColumn Header="Alcohol Content" Binding="{Binding AlcoholContent}" Width="Auto" />
+                        <DataGridTextColumn Header="Price" Binding="{Binding Price}" Width="Auto" />
+                        <DataGridTextColumn Header="Category" Binding="{Binding CategoryName}" Width="Auto" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </TabItem>
+            <TabItem Header="Requests">
+                <DataGrid x:Name="RequestsDataGrid" Grid.Row="1" Grid.Column="1" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Request ID" Binding="{Binding RequestId}" Width="*" />
+                        <DataGridTextColumn Header="Staff ID" Binding="{Binding AccountId}" Width="*" />
+                        <DataGridTextColumn Header="Wine" Binding="{Binding WineName}" Width="*" />
+                        <DataGridTextColumn Header="Quantity" Binding="{Binding Quantity}" Width="*" />
+                        <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="*" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </TabItem>
+        </TabControl>
+        <Button Content="Back" Margin="157,405,160,65" Grid.Row="1" Click="Back_Click"/>
+        <Button Grid.Column="1" Content="Logout" HorizontalAlignment="Left" Margin="277,10,0,0" Grid.Row="1" VerticalAlignment="Top" Height="50" Width="110" Click="Logout_Click"/>
+
+    </Grid>
+</Window>
