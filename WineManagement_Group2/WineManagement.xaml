@@ -129,6 +129,48 @@
                     </DataGrid>
                 </Grid>
             </TabItem>
+
+            <!-- Category Tab -->
+            <TabItem Header="Manage Category">
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Left">
+                        <TextBlock Text="Category Name:" VerticalAlignment="Center" Margin="5" />
+                        <TextBox x:Name="CategoryNameTextBox" Width="200" Margin="5" Height="28" />
+                        <TextBlock Text="Description:" VerticalAlignment="Center" Margin="5" />
+                        <TextBox x:Name="DescriptionTextBox" Width="200" Margin="5" Height="58" TextWrapping="Wrap" />
+
+                    </StackPanel>
+
+                    
+
+                    <!-- CRUD Buttons -->
+                    <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Center" Margin="0,0,0,141">
+                        <Button Content="Read" Width="100" Margin="10" Click="ReadCategoryButton_Click" Background="#FFFF5656"/>
+                        <Button Content="Create" Width="100" Margin="10" Click="CreateCategoryButton_Click" Background="#FF5EFF4F" Height="27"/>
+                        <Button Content="Update" Width="100" Margin="10" Click="UpdateCategoryButton_Click" Background="#FF4F99FF"/>
+                        <Button Content="Delete" Width="100" Margin="10" Click="DeleteCategoryButton_Click" Background="#FFF6FF43"/>
+                    </StackPanel>
+
+                    <!-- Data Grid for Category -->
+                    <DataGrid x:Name="CategoryDataGrid" Grid.Row="2" Margin="10,71,10,0" AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False" SelectionMode="Single" Grid.RowSpan="2">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Category ID" Binding="{Binding CategoryId}" Width="Auto" />
+                            <DataGridTextColumn Header="Category Name" Binding="{Binding CategoryName}" Width="*" />
+                            <DataGridTextColumn Header="Description person" Binding="{Binding Description}" Width="*" />
+                            
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+
+
         </TabControl>
         <Button Content="Back to Home Page" Click="BacktoManagerHomePage_click" Margin="664,34,10,416" Background="#FFF86CFF"/>
 

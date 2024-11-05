@@ -22,7 +22,7 @@
             <StackPanel Height="117">
                 <StackPanel Margin="50 -5" Height="121" Width="730" Orientation="Horizontal">
                     <Button Height="80" Width="100" Margin="25 0" Click="btnRequstLisr" Background="#FFFF9797" Content="List Request"/>
-                    <Button Height="80" Width="200" Margin="100 0" Click="btnWine_Supplier" Background="#FF88F1B5" Content="Wine and Supplier Manage"/>
+                    <Button Height="80" Width="200" Margin="100 0" Click="btnWine_Supplier" Background="#FF88F1B5" Content="Wine, Category and &#xD;&#xA;Supplier Manage"/>
                     <Button Height="80" Width="100" Margin="10 0" Click="btnStaff" Background="#FFF6FF90" Content="Staff Manage"/>
                 </StackPanel>
 

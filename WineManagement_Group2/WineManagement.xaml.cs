@@ -34,6 +34,7 @@ namespace WineWarehouseManagement
             _categoryDAO = new CategoryDAO();
             LoadWinefList();
             LoadSupplierList();
+            LoadCategoryList();
             LoadComboList();
         }
 
@@ -328,6 +329,101 @@ namespace WineWarehouseManagement
             else
             {
                 MessageBox.Show("Please select a supplier to delete.");
+            }
+
+        }
+
+        private void ClearInputFields3()
+        {
+
+            CategoryNameTextBox.Text = string.Empty;
+            DescriptionTextBox.Text = string.Empty;
+            
+
+
+        }
+
+        private void LoadCategoryList()
+        {
+            // Loads only accounts with "Staff" role into the DataGrid
+            CategoryDataGrid.ItemsSource = _categoryDAO.GetAllCategories();
+        }
+
+        private void ReadCategoryButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (CategoryDataGrid.SelectedItem is Category selectedCategory)
+            {
+                CategoryNameTextBox.Text = selectedCategory.CategoryName;
+                DescriptionTextBox.Text = selectedCategory.Description;
+            }
+            else
+            {
+                MessageBox.Show("Please select a category to read.");
+            }
+
+        }
+
+        private void CreateCategoryButton_Click(object sender, RoutedEventArgs e)
+        {
+            Category newCategory = new Category { 
+                CategoryName = CategoryNameTextBox.Text,
+                Description = DescriptionTextBox.Text,
+            
+            };
+
+            _categoryDAO.AddCategory(newCategory);
+
+            // Refresh the category list
+            LoadCategoryList();
+
+            // Clear the input fields
+            ClearInputFields3();
+
+        }
+
+        private void UpdateCategoryButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (CategoryDataGrid.SelectedItem is Category selectedCategory)
+            {
+                // Update the category's properties with the new values
+                selectedCategory.CategoryName = CategoryNameTextBox.Text;
+                selectedCategory.Description = DescriptionTextBox.Text;
+
+                // Update the category in the database
+                _categoryDAO.UpdateCategory(selectedCategory);
+
+                // Refresh the category list
+                LoadCategoryList();
+                ClearInputFields3();
+            }
+            else
+            {
+                MessageBox.Show("Please select a category to update.");
+            }
+
+        }
+
+        private void DeleteCategoryButton_Click(object sender, RoutedEventArgs e)
+        {
+
+            if (CategoryDataGrid.SelectedItem is Category selectedCategory)
+            {
+                // Confirm deletion with the user
+                if (MessageBox.Show("Are you sure you want to delete this category?", "Confirm Deletion", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                {
+                    // Delete the category from the database
+                    _categoryDAO.DeleteCategory(selectedCategory.CategoryId);
+
+                    // Refresh the category list
+                    LoadCategoryList();
+
+                    // Clear the input fields
+                    ClearInputFields3();
+                }
+            }
+            else
+            {
+                MessageBox.Show("Please select a category to delete.");
             }
 
         }
