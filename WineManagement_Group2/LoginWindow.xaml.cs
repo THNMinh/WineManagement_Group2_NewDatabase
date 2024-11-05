@@ -32,7 +32,7 @@ namespace WineWarehouseManagement
                         new AdminWindow().Show();
                         break;
                     case "Manager":
-                        new ManagerWindow().Show();
+                        new ManagerHomePageWindow().Show();
                         break;
                     case "Staff":
                         new StaffWindow(account.AccountId).Show();

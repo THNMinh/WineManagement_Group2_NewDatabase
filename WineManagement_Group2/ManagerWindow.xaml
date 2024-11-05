@@ -74,7 +74,6 @@
         </DataGrid>
 
         <!-- Save Changes Button -->
-        <Button Grid.Row="6" Grid.ColumnSpan="2" Content="Back to Manager Page" Width="181" Margin="0,10,0,10" HorizontalAlignment="Center" Click="LogoutButton_Click" Background="#FFB2FF60" BorderBrush="#FFDA9393" Foreground="Black"/>
-        <Button Content="Log Out" Width="100" Margin="389,5,0,11" HorizontalAlignment="Left" Click="LogoutButton_Click" Background="#FF5AFF94" BorderBrush="#FFDA9393" Foreground="Black" Grid.Column="1"/>
+        <Button Grid.Row="6" Grid.ColumnSpan="2" Content="Back to Manager Page" Width="181" Margin="0,10,0,10" HorizontalAlignment="Center" Click="BacktoManagerHomePage_click" Background="#FFB2FF60" BorderBrush="#FFDA9393" Foreground="Black"/>
     </Grid>
 </Window>

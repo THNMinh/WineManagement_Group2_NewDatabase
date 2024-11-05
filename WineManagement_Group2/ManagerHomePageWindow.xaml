@@ -1,0 +1,34 @@
+﻿<Window x:Class="WineWarehouseManagement.ManagerHomePageWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WineWarehouseManagement"
+        mc:Ignorable="d"
+        Title="ManagerHomePageWindow" Height="450" Width="800">
+    <Grid>
+        <Grid.Background>
+            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                <GradientStop Color="Black"/>
+                <GradientStop Color="#FFB67DFB" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+        <StackPanel Margin="0,50,0,10">
+            <StackPanel Margin="50" Height="100">
+                <TextBlock FontSize="75" HorizontalAlignment="Center" FontFamily="Algerian" Foreground="#FFEDEDED">
+                Manager Page
+                </TextBlock>
+            </StackPanel>
+            <StackPanel Height="117">
+                <StackPanel Margin="50 -5" Height="121" Width="730" Orientation="Horizontal">
+                    <Button Height="80" Width="100" Margin="25 0" Click="btnRequstLisr" Background="#FFFF9797" Content="List Request"/>
+                    <Button Height="80" Width="200" Margin="100 0" Click="btnWine_Supplier" Background="#FF88F1B5" Content="Wine and Supplier Manage"/>
+                    <Button Height="80" Width="100" Margin="10 0" Click="btnStaff" Background="#FFF6FF90" Content="Staff Manage"/>
+                </StackPanel>
+
+
+            </StackPanel>
+        </StackPanel>
+        <Button Content="Logout" Click="LogoutButton_Click" Margin="665,19,28,363"/>
+    </Grid>
+</Window>

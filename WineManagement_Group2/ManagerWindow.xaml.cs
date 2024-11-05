@@ -183,10 +183,11 @@ namespace WineWarehouseManagement
 
         }
 
-        private void LogoutButton_Click(object sender, RoutedEventArgs e)
+       
+        private void BacktoManagerHomePage_click(object sender, RoutedEventArgs e)
         {
-            LoginWindow login = new LoginWindow();
-            login.Show();
+            ManagerHomePageWindow managerWindow = new ManagerHomePageWindow();
+            managerWindow.Show();
             this.Close();
         }
     }
