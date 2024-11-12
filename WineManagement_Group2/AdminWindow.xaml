@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="AdminWindow" Height="600" Width="800" WindowStartupLocation="CenterScreen">
+        Title="AdminWindow" Height="800" Width="800" WindowStartupLocation="CenterScreen">
     <Grid>
         <TabControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <TabControl.Background>
@@ -14,36 +14,36 @@
                 </LinearGradientBrush>
             </TabControl.Background>
             <!-- Staff Tab -->
-            <TabItem Header="Manage Staff">
+            <TabItem x:Name="StaffTab" Header="Manage Staff">
                 <Grid Margin="10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="76*"/>
+                        <ColumnDefinition Width="311*"/>
+                    </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
 
-                    <StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Left">
+                    <StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Left" Grid.ColumnSpan="2" Margin="0,0,0,28" Grid.RowSpan="2">
                         <TextBlock Text="Staff Name:" VerticalAlignment="Center" Margin="5" />
                         <TextBox x:Name="StaffNameTextBox" Width="200" Margin="5" />
                         <TextBlock Text="Staff Email:" VerticalAlignment="Center" Margin="5" />
                         <TextBox x:Name="StaffEmailTextBox" Width="200" Margin="5" />
                     </StackPanel>
 
-                    <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Left">
+                    <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Left" Grid.ColumnSpan="2" Margin="0,0,0,655" Grid.RowSpan="2" Width="584">
                         <TextBlock Text="Password:" VerticalAlignment="Center" Margin="5" />
                         <PasswordBox x:Name="StaffPasswordBox" Width="200" Margin="5" />
                         <TextBlock Text="Role:" VerticalAlignment="Center" Margin="5" />
-                        <ComboBox x:Name="StaffRoleComboBox" Width="200" Margin="5">
-                            <ComboBoxItem Content="Staff" />
-                            <ComboBoxItem Content="Manager" />
-                            <ComboBoxItem Content="Admin" />
-                        </ComboBox>
+                        <TextBox x:Name="StaffRole" Text="Staff" IsEnabled="False" Width="200" Margin="5" />
                     </StackPanel>
 
                     <!-- CRUD Buttons -->
 
                     <!-- Data Grid for Staff -->
-                    <DataGrid x:Name="StaffDataGrid" Grid.Row="2" Margin="10,104,10,10" AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False" SelectionMode="Single">
+                    <DataGrid x:Name="StaffDataGrid" Grid.Row="2" Margin="10,152,10,10" AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False" SelectionMode="Single" Grid.ColumnSpan="2">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Staff ID" Binding="{Binding AccountId}" Width="Auto" />
                             <DataGridTextColumn Header="Staff Name" Binding="{Binding Username}" Width="*" />
@@ -52,17 +52,20 @@
                             <DataGridTextColumn Header="Role" Binding="{Binding Role}" Width="*" />
                         </DataGrid.Columns>
                     </DataGrid>
-                    <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Center" Margin="0,20,0,381">
+                    <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Left" Margin="121,17,0,577" Width="514" Grid.ColumnSpan="2">
                         <Button Content="Read" Width="100" Margin="10" Click="ReadStaffButton_Click"/>
                         <Button Content="Create" Width="100" Margin="10" Click="CreateStaffButton_Click"/>
                         <Button Content="Update" Width="100" Margin="10" Click="UpdateStaffButton_Click"/>
                         <Button Content="Delete" Width="100" Margin="10" Click="DeleteStaffButton_Click"/>
                     </StackPanel>
+                    <TextBox x:Name="txtSearch" HorizontalAlignment="Left" Height="41" Margin="148,98,0,0" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Width="487" Grid.Row="2" Grid.ColumnSpan="2"/>
+                    <Button Content="Search" HorizontalAlignment="Left" Height="45" Margin="499,96,0,0" VerticalAlignment="Top" Width="95" Click="btn_Search" Grid.Row="2" Grid.Column="1"/>
+                    <Label Content="Search By Name" FontSize="16" HorizontalAlignment="Center" Height="32" Margin="0,103,0,0" VerticalAlignment="Top" Width="133" Grid.Row="2"/>
                 </Grid>
             </TabItem>
 
             <!-- Manager Tab -->
-            <TabItem Header="Manage Manager">
+            <TabItem x:Name="ManagerTab" Header="Manage Manager">
                 <Grid Margin="10">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
@@ -90,7 +93,7 @@
                     </StackPanel>
 
                     <!-- CRUD Buttons -->
-                    <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Center" Margin="0,10,0,397">
+                    <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Center" Margin="0,10,0,590" Width="486">
                         <Button Content="Read" Width="100" Margin="10" Click="ReadManagerButton_Click"/>
                         <Button Content="Create" Width="100" Margin="10" Click="CreateManagerButton_Click"/>
                         <Button Content="Update" Width="100" Margin="10" Click="UpdateManagerButton_Click"/>
@@ -98,7 +101,7 @@
                     </StackPanel>
 
                     <!-- Data Grid for Manager -->
-                    <DataGrid x:Name="ManagerDataGrid" Grid.Row="2" Margin="10,84,10,10" AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False" SelectionMode="Single">
+                    <DataGrid x:Name="ManagerDataGrid" Grid.Row="2" Margin="10,152,10,10" AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False" SelectionMode="Single">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Manager ID" Binding="{Binding AccountId}" Width="Auto" />
                             <DataGridTextColumn Header="Manager Name" Binding="{Binding Username}" Width="*" />
@@ -107,10 +110,13 @@
                             <DataGridTextColumn Header="Role" Binding="{Binding Role}" Width="*" />
                         </DataGrid.Columns>
                     </DataGrid>
+                    <TextBox x:Name="txtSearchManager" HorizontalAlignment="Left" Height="41" Margin="148,94,0,0" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Width="487" Grid.Row="2"/>
+                    <Button Content="Search" HorizontalAlignment="Left" Height="45" Margin="651,92,0,0" VerticalAlignment="Top" Width="95" Click="btn_Search" Grid.Row="2"/>
+                    <Label Content="Search By Name" FontSize="16" HorizontalAlignment="Left" Height="32" Margin="7,99,0,0" VerticalAlignment="Top" Width="136" Grid.Row="2"/>
                 </Grid>
             </TabItem>
         </TabControl>
-        <Button Content="Logout" Click="LogoutButton_Click" Margin="664,34,10,485"/>
+        <Button Content="Logout" Click="LogoutButton_Click" Margin="650,34,20,682"/>
 
     </Grid>
 </Window>

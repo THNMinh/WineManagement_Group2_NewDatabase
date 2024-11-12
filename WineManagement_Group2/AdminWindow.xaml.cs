@@ -37,15 +37,6 @@ namespace WineWarehouseManagement
                 StaffNameTextBox.Text = selectedStaff.Username;
                 StaffPasswordBox.Password = selectedStaff.PasswordHash;
                 StaffEmailTextBox.Text = selectedStaff.Email;
-
-                foreach (ComboBoxItem item in StaffRoleComboBox.Items)
-                {
-                    if (item.Content.ToString() == selectedStaff.Role)
-                    {
-                        StaffRoleComboBox.SelectedItem = item;
-                        break;
-                    }
-                }
             }
             else
             {
@@ -131,7 +122,7 @@ namespace WineWarehouseManagement
                     selectedStaff.Username = StaffNameTextBox.Text;
                     selectedStaff.Email = StaffEmailTextBox.Text;
                     selectedStaff.PasswordHash = StaffPasswordBox.Password;
-                    selectedStaff.Role = (StaffRoleComboBox.SelectedItem as ComboBoxItem)?.Content.ToString();
+                    selectedStaff.Role = StaffRole.Text;
 
                     _accountDAO.UpdateAccount(selectedStaff);
                     LoadStaffList();
@@ -153,15 +144,19 @@ namespace WineWarehouseManagement
 
         private void DeleteStaffButton_Click(object sender, RoutedEventArgs e)
         {
-            if (StaffDataGrid.SelectedItem is Account selectedStaff)
+            MessageBoxResult result = MessageBox.Show("Are you sure you want to delete this staff?", "Delete Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            if (result == MessageBoxResult.Yes)
             {
-                _accountDAO.DeleteAccount(selectedStaff.AccountId);
-                LoadStaffList();
-                ClearStaffFields();
-            }
-            else
-            {
-                MessageBox.Show("Please select a valid staff member to delete.");
+                if (StaffDataGrid.SelectedItem is Account selectedStaff)
+                {
+                    _accountDAO.DeleteAccount(selectedStaff.AccountId);
+                    LoadStaffList();
+                    ClearStaffFields();
+                }
+                else
+                {
+                    MessageBox.Show("Please select a valid staff member to delete.");
+                }
             }
         }
 
@@ -172,7 +167,6 @@ namespace WineWarehouseManagement
             StaffNameTextBox.Text = string.Empty;
             StaffPasswordBox.Password = string.Empty;
             StaffEmailTextBox.Text = string.Empty;
-            StaffRoleComboBox.Text = string.Empty;
         }
 
 
@@ -291,15 +285,19 @@ namespace WineWarehouseManagement
         // Delete selected manager
         private void DeleteManagerButton_Click(object sender, RoutedEventArgs e)
         {
-            if (ManagerDataGrid.SelectedItem is Account selectedManager)
+            MessageBoxResult result = MessageBox.Show("Are you sure you want to delete this request detail?", "Delete Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            if (result == MessageBoxResult.Yes)
             {
-                _accountDAO.DeleteAccount(selectedManager.AccountId);
-                LoadManagerList();
-                ClearManagerFields();
-            }
-            else
-            {
-                MessageBox.Show("Please select a manager to delete.");
+                if (ManagerDataGrid.SelectedItem is Account selectedManager)
+                {
+                    _accountDAO.DeleteAccount(selectedManager.AccountId);
+                    LoadManagerList();
+                    ClearManagerFields();
+                }
+                else
+                {
+                    MessageBox.Show("Please select a manager to delete.");
+                }
             }
         }
 
@@ -317,6 +315,69 @@ namespace WineWarehouseManagement
             LoginWindow login = new LoginWindow();
             login.Show();
             this.Close();
+        }
+
+        private void btn_Search(object sender, RoutedEventArgs e)
+        {
+            string searchKeyword = string.Empty;
+
+            // Kiểm tra xem tab nào đang được chọn và lấy giá trị tìm kiếm tương ứng
+            if (StaffTab.IsSelected) // Nếu đang ở tab Staff
+            {
+                searchKeyword = txtSearch.Text.Trim().ToLower();  // Tìm kiếm cho Staff
+            }
+            else if (ManagerTab.IsSelected) // Nếu đang ở tab Manager
+            {
+                searchKeyword = txtSearchManager.Text.Trim().ToLower();  // Tìm kiếm cho Manager
+            }
+
+            // Nếu không có từ khóa tìm kiếm, tải lại danh sách tương ứng
+            if (string.IsNullOrWhiteSpace(searchKeyword))
+            {
+                if (StaffTab.IsSelected)
+                {
+                    LoadStaffList();
+                }
+                else if (ManagerTab.IsSelected)
+                {
+                    LoadManagerList();
+                }
+                return;
+            }
+
+            // Kiểm tra xem tab nào đang được chọn
+            if (StaffTab.IsSelected) // Nếu đang ở tab Staff
+            {
+                var result = _accountDAO.GetAccountsByRole("Staff")
+                                        .Where(account => account.Username.ToLower().Contains(searchKeyword))
+                                        .ToList();
+
+                if (result.Any())
+                {
+                    StaffDataGrid.ItemsSource = result; // Hiển thị kết quả vào DataGrid
+                }
+                else
+                {
+                    MessageBox.Show("No staff found with the specified name.", "Search Result", MessageBoxButton.OK, MessageBoxImage.Information);
+                    StaffDataGrid.ItemsSource = null; // Nếu không tìm thấy, không hiển thị kết quả
+                }
+            }
+            else if (ManagerTab.IsSelected) // Nếu đang ở tab Manager
+            {
+                var result = _accountDAO.GetAccountsByRole("Manager")
+                                        .Where(account => account.Username.ToLower().Contains(searchKeyword))
+                                        .ToList();
+
+                if (result.Any())
+                {
+                    ManagerDataGrid.ItemsSource = result; // Hiển thị kết quả vào DataGrid
+                }
+                else
+                {
+                    MessageBox.Show("No managers found with the specified name.", "Search Result", MessageBoxButton.OK, MessageBoxImage.Information);
+                    ManagerDataGrid.ItemsSource = null; // Nếu không tìm thấy, không hiển thị kết quả
+                }
+            }
         }
     }
 }

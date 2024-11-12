@@ -121,6 +121,40 @@ namespace WineWarehouseManagement
                 MessageBox.Show("Error creating request: " + ex.Message);
             }
         }
+
+        private void btn_Search(object sender, RoutedEventArgs e)
+        {
+            string searchKeyword = txtSearch.Text.Trim().ToLower();
+
+            // Kiểm tra tab nào đang được chọn để tìm kiếm
+            if (WineTab.IsSelected) // Kiểm tra xem tab Wines có đang được chọn hay không
+            {
+                // Tìm kiếm theo Wine Name
+                var result = _context.Wines
+                    .Where(w => w.Name.ToLower().Contains(searchKeyword))
+                    .Select(wine => new
+                    {
+                        wine.Name,
+                        wine.VintageYear,
+                        wine.AlcoholContent,
+                        wine.Price,
+                        CategoryName = wine.Category != null ? wine.Category.CategoryName : "N/A"
+                    })
+                    .ToList();
+
+                WineDataGrid.ItemsSource = result;
+            }
+            else if (RequestTab.IsSelected) // Kiểm tra xem tab Requests có đang được chọn hay không
+            {
+                // Tìm kiếm theo Wine Name trong danh sách Requests
+                var result = GetRequestData()
+                .Where(r => r.WineName.ToLower().Contains(searchKeyword))
+                .ToList();
+
+                RequestsDataGrid.ItemsSource = result;
+            }
+        }
+
         protected override void OnClosed(EventArgs e)
         {
             // Đóng context khi cửa sổ bị đóng
