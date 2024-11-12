@@ -144,17 +144,20 @@ namespace WineWarehouseManagement
 
         private void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
-            if (StaffDataGrid.SelectedItem is Account selectedStaff)
+            MessageBoxResult result = MessageBox.Show("Are you sure you want to delete this staff?", "Delete Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            if (result == MessageBoxResult.Yes)
             {
-                _accountDAO.DeleteAccount(selectedStaff.AccountId);
-                LoadStaffList();
-                ClearStaffFields();
+                if (StaffDataGrid.SelectedItem is Account selectedStaff)
+                {
+                    _accountDAO.DeleteAccount(selectedStaff.AccountId);
+                    LoadStaffList();
+                    ClearStaffFields();
+                }
+                else
+                {
+                    MessageBox.Show("Please select a valid staff member to delete.");
+                }
             }
-            else
-            {
-                MessageBox.Show("Please select a valid staff member to delete.");
-            }
-
         }
 
 
