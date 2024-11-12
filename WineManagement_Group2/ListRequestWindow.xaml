@@ -21,7 +21,6 @@
             <StackPanel Orientation="Horizontal" Margin="5">
                 <Label Content="Request ID:" Width="69" VerticalAlignment="Center"/>
                 <TextBox x:Name="RequestIDBox" Width="46" Height="23"/>
-                <Button Content="Select request" Click="ReadButton_Click" Width="92" Margin="10" Background="#FFFF9393" Height="32"/>
             </StackPanel>
 
 
@@ -40,7 +39,7 @@
            
         </StackPanel>
 
-        <DataGrid x:Name="RequestsDataGrid" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True" Margin="400,89,21,29">
+        <DataGrid x:Name="RequestsDataGrid" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True" Margin="400,89,21,29" SelectionChanged="dgData_SelectionChanged">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Request ID" Binding="{Binding RequestId}" Width="*" />
                 <DataGridTextColumn Header="Staff ID" Binding="{Binding AccountId}" Width="*" />

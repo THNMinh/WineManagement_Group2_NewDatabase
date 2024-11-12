@@ -29,20 +29,7 @@ namespace WineWarehouseManagement
             StaffDataGrid.ItemsSource = _accountDAO.GetAccountsByRole("Staff");
         }
 
-        private void ReadStaffButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (StaffDataGrid.SelectedItem is Account selectedStaff)
-            {
-                // Populate text fields with the selected staff information
-                StaffNameTextBox.Text = selectedStaff.Username;
-                StaffPasswordBox.Password = selectedStaff.PasswordHash;
-                StaffEmailTextBox.Text = selectedStaff.Email;
-            }
-            else
-            {
-                MessageBox.Show("Please select a staff member to read.");
-            }
-        }
+        
 
         private bool IsValidGmail(string email)
         {
@@ -60,7 +47,7 @@ namespace WineWarehouseManagement
         {
             if (string.IsNullOrWhiteSpace(StaffNameTextBox.Text) ||
                 string.IsNullOrWhiteSpace(StaffEmailTextBox.Text) ||
-                string.IsNullOrWhiteSpace(StaffPasswordBox.Password))
+                string.IsNullOrWhiteSpace(StaffPasswordBox.Text))
             {
                 MessageBox.Show("Please fill in all required fields (Name, Email, and Password).", "Missing Information", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
@@ -82,11 +69,12 @@ namespace WineWarehouseManagement
             {
                 Username = StaffNameTextBox.Text,
                 Email = StaffEmailTextBox.Text,
-                PasswordHash = StaffPasswordBox.Password,
+                PasswordHash = StaffPasswordBox.Text,
                 Role = "Staff"
             };
 
-            _accountDAO.AddAccount(newStaff);
+
+                _accountDAO.AddAccount(newStaff);
             LoadStaffList();
             ClearStaffFields();
         }
@@ -95,7 +83,7 @@ namespace WineWarehouseManagement
         {
             if (string.IsNullOrWhiteSpace(StaffNameTextBox.Text) ||
             string.IsNullOrWhiteSpace(StaffEmailTextBox.Text) ||
-            string.IsNullOrWhiteSpace(StaffPasswordBox.Password))
+            string.IsNullOrWhiteSpace(StaffPasswordBox.Text))
             {
                 MessageBox.Show("Please fill in all required fields (Name, Email, and Password).", "Missing Information", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
@@ -121,7 +109,7 @@ namespace WineWarehouseManagement
                 {
                     selectedStaff.Username = StaffNameTextBox.Text;
                     selectedStaff.Email = StaffEmailTextBox.Text;
-                    selectedStaff.PasswordHash = StaffPasswordBox.Password;
+                    selectedStaff.PasswordHash = StaffPasswordBox.Text;
                     selectedStaff.Role = StaffRole.Text;
 
                     _accountDAO.UpdateAccount(selectedStaff);
@@ -144,6 +132,13 @@ namespace WineWarehouseManagement
 
         private void DeleteStaffButton_Click(object sender, RoutedEventArgs e)
         {
+            if (string.IsNullOrWhiteSpace(StaffNameTextBox.Text) ||
+           string.IsNullOrWhiteSpace(StaffEmailTextBox.Text) ||
+           string.IsNullOrWhiteSpace(StaffPasswordBox.Text))
+            {
+                MessageBox.Show("Please fill in all required fields (Name, Email, and Password).", "Missing Information", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
             MessageBoxResult result = MessageBox.Show("Are you sure you want to delete this staff?", "Delete Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Warning);
             if (result == MessageBoxResult.Yes)
             {
@@ -165,7 +160,7 @@ namespace WineWarehouseManagement
         {
             // Clears the text fields after creating, updating, or deleting
             StaffNameTextBox.Text = string.Empty;
-            StaffPasswordBox.Password = string.Empty;
+            StaffPasswordBox.Text = string.Empty;
             StaffEmailTextBox.Text = string.Empty;
         }
 
@@ -285,6 +280,13 @@ namespace WineWarehouseManagement
         // Delete selected manager
         private void DeleteManagerButton_Click(object sender, RoutedEventArgs e)
         {
+            if (string.IsNullOrWhiteSpace(ManagerNameTextBox.Text) ||
+                    string.IsNullOrWhiteSpace(ManagerEmailTextBox.Text) ||
+                    string.IsNullOrWhiteSpace(ManagerPasswordTextBox.Text))
+            {
+                MessageBox.Show("Please fill in all required fields (Name, Email, and Password).", "Missing Information", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
             MessageBoxResult result = MessageBox.Show("Are you sure you want to delete this request detail?", "Delete Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Warning);
             if (result == MessageBoxResult.Yes)
             {
@@ -315,6 +317,38 @@ namespace WineWarehouseManagement
             LoginWindow login = new LoginWindow();
             login.Show();
             this.Close();
+        }
+
+        private void dgData_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (StaffDataGrid.SelectedItem is Account selectedStaff)
+            {
+
+                StaffNameTextBox.Text = selectedStaff.Username.ToString();
+                StaffEmailTextBox.Text = selectedStaff.Email;
+                StaffPasswordBox.Text = selectedStaff.PasswordHash; // Assuming you want to display this as well
+                StaffRole.Text = selectedStaff.Role.ToString(); // Convert boolean to string
+
+
+            }
+
+
+        }
+
+        private void dgData_SelectionChangedForMANAGER(object sender, SelectionChangedEventArgs e)
+        {
+            if (ManagerDataGrid.SelectedItem is Account selectedStaff)
+            {
+
+                ManagerNameTextBox.Text = selectedStaff.Username.ToString();
+                ManagerEmailTextBox.Text = selectedStaff.Email;
+                ManagerPasswordTextBox.Text = selectedStaff.PasswordHash; // Assuming you want to display this as well
+                ManagerRoleComboBox.Text = selectedStaff.Role.ToString(); // Convert boolean to string
+
+
+            }
+
+
         }
 
         private void btn_Search(object sender, RoutedEventArgs e)
@@ -359,7 +393,7 @@ namespace WineWarehouseManagement
                 else
                 {
                     MessageBox.Show("No staff found with the specified name.", "Search Result", MessageBoxButton.OK, MessageBoxImage.Information);
-                    StaffDataGrid.ItemsSource = null; // Nếu không tìm thấy, không hiển thị kết quả
+                    //StaffDataGrid.ItemsSource = null; // Nếu không tìm thấy, không hiển thị kết quả
                 }
             }
             else if (ManagerTab.IsSelected) // Nếu đang ở tab Manager
@@ -375,7 +409,7 @@ namespace WineWarehouseManagement
                 else
                 {
                     MessageBox.Show("No managers found with the specified name.", "Search Result", MessageBoxButton.OK, MessageBoxImage.Information);
-                    ManagerDataGrid.ItemsSource = null; // Nếu không tìm thấy, không hiển thị kết quả
+                    //ManagerDataGrid.ItemsSource = null; // Nếu không tìm thấy, không hiển thị kết quả
                 }
             }
         }

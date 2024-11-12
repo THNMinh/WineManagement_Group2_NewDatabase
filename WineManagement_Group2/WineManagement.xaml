@@ -55,7 +55,7 @@
 
                     <!-- CRUD Buttons -->
                     <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Left" Margin="25,24,0,236" Grid.Column="1">
-                        <Button Content="Read" Width="100" Margin="10" Click="ReadWineButton_Click" Background="#FFFF5858"/>
+                        <Button Content="Select wine" Width="100" Margin="10" Click="ReadWineButton_Click" Background="#FFFF5858"/>
                         <Button Content="Create" Width="100" Margin="10" Click="CreateWineButton_Click" Background="#FF5DFF18"/>
                         <Button Content="Update" Width="100" Margin="10" Click="UpdateWineButton_Click" Background="#FF4745FF"/>
                         <Button Content="Delete" Width="100" Margin="10" Click="DeleteWineButton_Click" Background="#FFF1FF5A"/>
@@ -71,6 +71,7 @@
                             <DataGridTextColumn Header="Price" Binding="{Binding Price}" Width="*" />
                             <DataGridTextColumn Header="Category ID" Binding="{Binding CategoryId}" Width="*" />
                             <DataGridTextColumn Header="Supplier ID" Binding="{Binding SupplierId}" Width="*" />
+                            <DataGridTextColumn Header="Supplier Name" Binding="{Binding Supplier.Name}" Width="*" />
                         </DataGrid.Columns>
                     </DataGrid>
 
@@ -110,7 +111,7 @@
 
                     <!-- CRUD Buttons -->
                     <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Center" Margin="0,28,0,191">
-                        <Button Content="Read" Width="100" Margin="10" Click="ReadSupplierButton_Click" Background="#FFFF5656"/>
+                        <Button Content="Select supplier" Width="100" Margin="10" Click="ReadSupplierButton_Click" Background="#FFFF5656"/>
                         <Button Content="Create" Width="100" Margin="10" Click="CreateSupplierButton_Click" Background="#FF5EFF4F"/>
                         <Button Content="Update" Width="100" Margin="10" Click="UpdateSupplierButton_Click" Background="#FF4F99FF"/>
                         <Button Content="Delete" Width="100" Margin="10" Click="DeleteSupplierButton_Click" Background="#FFF6FF43"/>
@@ -152,7 +153,7 @@
 
                     <!-- CRUD Buttons -->
                     <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Center" Margin="0,0,0,141">
-                        <Button Content="Read" Width="100" Margin="10" Click="ReadCategoryButton_Click" Background="#FFFF5656"/>
+                        <Button Content="Select Ctegory" Width="100" Margin="10" Click="ReadCategoryButton_Click" Background="#FFFF5656"/>
                         <Button Content="Create" Width="100" Margin="10" Click="CreateCategoryButton_Click" Background="#FF5EFF4F" Height="27"/>
                         <Button Content="Update" Width="100" Margin="10" Click="UpdateCategoryButton_Click" Background="#FF4F99FF"/>
                         <Button Content="Delete" Width="100" Margin="10" Click="DeleteCategoryButton_Click" Background="#FFF6FF43"/>

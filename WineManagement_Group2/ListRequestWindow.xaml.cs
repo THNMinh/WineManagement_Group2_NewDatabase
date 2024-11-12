@@ -84,19 +84,19 @@ namespace WineWarehouseManagement
         //    RequestsDataGrid.ItemsSource = _requestDAO.GetAllRequests();
         //}
 
-        private void ReadButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (RequestsDataGrid.SelectedItem is RequestData selectedStaff)
-            {
-                // Populate text fields with the selected staff information
-                RequestIDBox.Text = selectedStaff.RequestId.ToString();
+        //private void ReadButton_Click(object sender, RoutedEventArgs e)
+        //{
+        //    if (RequestsDataGrid.SelectedItem is RequestData selectedStaff)
+        //    {
+        //        // Populate text fields with the selected staff information
+        //        RequestIDBox.Text = selectedStaff.RequestId.ToString();
                 
-            }
-            else
-            {
-                MessageBox.Show("Please select a staff member to read.");
-            }
-        }
+        //    }
+        //    else
+        //    {
+        //        MessageBox.Show("Please select a staff member to read.");
+        //    }
+        //}
 
         private void UpdateButton_Click(object sender, RoutedEventArgs e)
         {
@@ -146,6 +146,21 @@ namespace WineWarehouseManagement
             ManagerHomePageWindow managerWindow = new ManagerHomePageWindow();
             managerWindow.Show();
             this.Close();
+        }
+
+
+        private void dgData_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (RequestsDataGrid.SelectedItem is RequestData selectedRequest)
+            {
+                RequestIDBox.Text = selectedRequest.RequestDetailId.ToString();
+
+             
+
+
+            }
+
+
         }
 
         private void RejectButton_Click(object sender, RoutedEventArgs e)

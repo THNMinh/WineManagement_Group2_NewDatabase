@@ -126,6 +126,17 @@ namespace WineWarehouseManagement
 
         private void CreateWineButton_Click(object sender, RoutedEventArgs e)
         {
+            if (string.IsNullOrWhiteSpace(WineNameTextBox.Text) ||
+                string.IsNullOrWhiteSpace(VintageYearTextBox.Text) ||
+                string.IsNullOrWhiteSpace(PriceBox.Text) ||
+                string.IsNullOrWhiteSpace(AlcoholContentBox.Text) || 
+                string.IsNullOrWhiteSpace(CategoryComboBox.Text) || 
+                string.IsNullOrWhiteSpace(SupplierComboBox.Text))
+            {
+                MessageBox.Show("Please fill in all required fields.", "Missing Information", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
             // Create a new Wine object with the entered data
             Wine newWine = new Wine
             {
@@ -252,6 +263,15 @@ namespace WineWarehouseManagement
 
         private void CreateSupplierButton_Click(object sender, RoutedEventArgs e)
         {
+            if (string.IsNullOrWhiteSpace(SupplierNameTextBox.Text) ||
+                string.IsNullOrWhiteSpace(ContactPersonTextBox.Text) ||
+                string.IsNullOrWhiteSpace(PhoneTextBox.Text) ||
+                string.IsNullOrWhiteSpace(EmailTextBox.Text) ||
+                string.IsNullOrWhiteSpace(AddressTextBox.Text) )
+            {
+                MessageBox.Show("Please fill in all required fields.", "Missing Information", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
             Supplier newSupplier = new Supplier
             {
                 Name = SupplierNameTextBox.Text,
@@ -365,6 +385,12 @@ namespace WineWarehouseManagement
 
         private void CreateCategoryButton_Click(object sender, RoutedEventArgs e)
         {
+            if (string.IsNullOrWhiteSpace(CategoryNameTextBox.Text) ||
+                string.IsNullOrWhiteSpace(DescriptionTextBox.Text))
+            {
+                MessageBox.Show("Please fill in all required fields.", "Missing Information", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
             Category newCategory = new Category { 
                 CategoryName = CategoryNameTextBox.Text,
                 Description = DescriptionTextBox.Text,
@@ -425,6 +451,12 @@ namespace WineWarehouseManagement
             {
                 MessageBox.Show("Please select a category to delete.");
             }
+
+        }
+
+
+        private void StaffDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
 
         }
     }

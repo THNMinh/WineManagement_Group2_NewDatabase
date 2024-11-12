@@ -41,7 +41,7 @@
 
         <!-- Phone -->
         <Label Grid.Row="2" Grid.Column="0" Content="Password:" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
-        <PasswordBox x:Name="StaffPasswordBox" Grid.Row="2" Grid.Column="1" Width="200" Margin="5"/>
+        <TextBox x:Name="StaffPasswordBox" Grid.Row="2" Grid.Column="1" Width="200" Margin="5"/>
 
         <!-- Address -->
         <Label Grid.Row="3" Grid.Column="0" Content="Role:" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
@@ -58,12 +58,12 @@
             <Button Content="Update" Width="80" Margin="5" Click="UpdateButton_Click" Background="#FF00A2FF"/>
             <Button Content="Create" Width="80" Margin="5" Click="CreateButton_Click" Background="#FF00FF22"/>
             <Button Content="Delete" Width="80" Margin="5" Click="DeleteButton_Click" Background="#FFFF4C00"/>
-            <Button Content="Read" Width="80" Margin="5" Click="ReadButton_Click" Background="#FFC013FF" />
+           
 
         </StackPanel>
 
         <!-- DataGrid for displaying staff -->
-        <DataGrid x:Name="StaffDataGrid" Grid.Row="5" Grid.ColumnSpan="2" AutoGenerateColumns="False" CanUserAddRows="False" Margin="5" IsReadOnly="True">
+        <DataGrid x:Name="StaffDataGrid" Grid.Row="5" Grid.ColumnSpan="2" AutoGenerateColumns="False" CanUserAddRows="False" Margin="5" IsReadOnly="True" SelectionChanged="dgData_SelectionChanged">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Staff ID" Binding="{Binding AccountId}" Width="Auto" />
                 <DataGridTextColumn Header="Staff Name" Binding="{Binding Username}" Width="*" />
