@@ -16,7 +16,7 @@
         <Label Content="REQUEST Management" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,366" Width="280" />
 
 
-        <StackPanel Grid.Row="1" Grid.Column="0" Margin="18,124,21,0" VerticalAlignment="Top" Height="243">
+        <StackPanel Grid.Column="0" Margin="18,34,21,0" VerticalAlignment="Top" Height="243">
             <!-- Wine Name -->
             <StackPanel Orientation="Horizontal" Margin="5">
                 <Label Content="Request ID:" Width="69" VerticalAlignment="Center"/>
@@ -36,19 +36,37 @@
                 <Button Content="Accept the Request" Width="133" Margin="10" Click="UpdateButton_Click" Background="#FF4FC6FF" Height="32"/>
 
             </StackPanel>
-           
+
         </StackPanel>
 
-        <DataGrid x:Name="RequestsDataGrid" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True" Margin="400,89,21,29" SelectionChanged="dgData_SelectionChanged">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Request ID" Binding="{Binding RequestId}" Width="*" />
-                <DataGridTextColumn Header="Staff ID" Binding="{Binding AccountId}" Width="*" />
-                <DataGridTextColumn Header="Wine" Binding="{Binding WineName}" Width="*" />
-                <DataGridTextColumn Header="Quantity" Binding="{Binding Quantity}" Width="*" />
-                <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="*" />
-            </DataGrid.Columns>
-        </DataGrid>
-        <Button Content="Back to manager home page" Click="BacktoManagerHomePage_click" Margin="80,347,540,29" Background="#FFE99EFF"/>
+        <TabControl Margin="0,136,0,0">
+            <TabItem x:Name="RequestTab" Header="Requests">
+                <DataGrid x:Name="RequestsDataGrid" Grid.Row="1" Grid.Column="1" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True" SelectionChanged="dgData_SelectionChanged">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Request ID" Binding="{Binding RequestId}" Width="*" />
+                        <DataGridTextColumn Header="Staff ID" Binding="{Binding AccountId}" Width="*" />
+                        <DataGridTextColumn Header="Wine" Binding="{Binding WineName}" Width="*" />
+                        <DataGridTextColumn Header="Quantity" Binding="{Binding Quantity}" Width="*" />
+                        <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="*" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </TabItem>
+            <TabItem x:Name="WareHouseTab" Header="WareHouse">
+                <DataGrid x:Name="WareHousesDataGrid" Grid.Row="1" Grid.Column="1" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Wine Name" Binding="{Binding WineName}" Width="*" />
+                        <DataGridTextColumn Header="WareHouse Address" Binding="{Binding Address}" Width="*" />
+                        <DataGridTextColumn Header="Contact Person" Binding="{Binding ContactPerson}" Width="*" />
+                        <DataGridTextColumn Header="Phone Number" Binding="{Binding PhoneNumber}" Width="*" />
+                        <DataGridTextColumn Header="Location" Binding="{Binding Location}" Width="*" />
+                        <DataGridTextColumn Header="Quantity" Binding="{Binding Quantity}" Width="*" />
+                        <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="*" />
+                    </DataGrid.Columns>
+                </DataGrid>
+
+            </TabItem>
+        </TabControl>
+        <Button Content="Back to manager home page" Click="BacktoManagerHomePage_click" Margin="599,5,21,371" Background="#FFE99EFF"/>
 
     </Grid>
 </Window>

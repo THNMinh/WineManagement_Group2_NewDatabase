@@ -26,6 +26,7 @@ namespace WineWarehouseManagement
 
         private readonly IRequestDetailRepository _requestDetailDAO;
         private readonly IRequestRepository _requestDAO;
+        private readonly IWareHouseRepository _wareHouseDAO;
         private WineManagement2Context _context;
         public ListRequestWindow()
         {
@@ -33,8 +34,16 @@ namespace WineWarehouseManagement
             _context = new WineManagement2Context();
             _requestDetailDAO = new RequestDetailDAO();
             _requestDAO = new RequestDAO();
+            _wareHouseDAO = new WareHouseDAO();
             LoadRequest();
+            LoadWareHouseList();
         }
+
+        private void LoadWareHouseList()
+        {
+            WareHousesDataGrid.ItemsSource = _wareHouseDAO.GetWareHouseWineDetails();
+        }
+
 
         private void LoadRequest()
         {
@@ -91,7 +100,7 @@ namespace WineWarehouseManagement
         //    {
         //        // Populate text fields with the selected staff information
         //        RequestIDBox.Text = selectedStaff.RequestId.ToString();
-                
+
         //    }
         //    else
         //    {
@@ -104,33 +113,33 @@ namespace WineWarehouseManagement
             {
                 if (RequestsDataGrid.SelectedItem is RequestData selectedRequest)
                 {
-                    
-                        int requestDetailId = selectedRequest.RequestDetailId; // Correct ID for RequestDetail
+
+                    int requestDetailId = selectedRequest.RequestDetailId; // Correct ID for RequestDetail
 
 
-                        var requestDetail = _requestDAO.GetRequestById(requestDetailId);
-                        if (requestDetail != null)
+                    var requestDetail = _requestDAO.GetRequestById(requestDetailId);
+                    if (requestDetail != null)
+                    {
+                        requestDetail.Status = "Accepted";
+
+
+                        try
                         {
-                            requestDetail.Status = "Accepted";
-                            
+                            _requestDAO.UpdateRequest(requestDetail);
+                            MessageBox.Show("Request detail updated successfully.");
+                            LoadRequest(); // Refresh the request data grid
 
-                            try
-                            {
-                                _requestDAO.UpdateRequest(requestDetail);
-                                MessageBox.Show("Request detail updated successfully.");
-                                LoadRequest(); // Refresh the request data grid
-                               
-                            }
-                            catch (Exception ex)
-                            {
-                                MessageBox.Show("Error updating request detail: " + ex.Message);
-                            }
                         }
-                        else
+                        catch (Exception ex)
                         {
-                            MessageBox.Show("Request detail not found.");
+                            MessageBox.Show("Error updating request detail: " + ex.Message);
                         }
-                    
+                    }
+                    else
+                    {
+                        MessageBox.Show("Request detail not found.");
+                    }
+
                 }
                 else
                 {
@@ -140,7 +149,7 @@ namespace WineWarehouseManagement
             }
         }
 
-        
+
 
         private void BacktoManagerHomePage_click(object sender, RoutedEventArgs e)
         {
@@ -150,19 +159,7 @@ namespace WineWarehouseManagement
         }
 
 
-        private void dgData_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (RequestsDataGrid.SelectedItem is RequestData selectedRequest)
-            {
-                RequestIDBox.Text = selectedRequest.RequestDetailId.ToString();
 
-             
-
-
-            }
-
-
-        }
 
         private void RejectButton_Click(object sender, RoutedEventArgs e)
         {
@@ -203,6 +200,20 @@ namespace WineWarehouseManagement
                 }
 
             }
+
+        }
+
+        private void dgData_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (RequestsDataGrid.SelectedItem is RequestData selectedRequest)
+            {
+                RequestIDBox.Text = selectedRequest.RequestDetailId.ToString();
+
+
+
+
+            }
+
 
         }
     }

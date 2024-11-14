@@ -64,5 +64,28 @@ namespace DataAccessLayer
                 return db.WareHouses.Where(a => a.Address == Address).ToList();
             }
         }
+
+        public IEnumerable<object> GetWareHouseWineDetails()
+        {
+            using (var db = new WineManagement2Context())
+            {
+                var result = from ww in db.WarehouseWines
+                             join wh in db.WareHouses on ww.WareHouseId equals wh.WareHouseId
+                             join w in db.Wines on ww.WineId equals w.WineId
+                             where wh.Status == "True"  // Only active warehouses
+                             select new
+                             {
+                                 WineName = w.Name,
+                                 Address = wh.Address,
+                                 ContactPerson = wh.ContactPerson,
+                                 PhoneNumber = wh.PhoneNumber,
+                                 Location = wh.Location,
+                                 Quantity = ww.Quantity,
+                                 Description = ww.Description
+                             };
+
+                return result.ToList();
+            }
+        }
     }
 }

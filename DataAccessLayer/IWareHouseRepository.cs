@@ -15,5 +15,6 @@ namespace DataAccessLayer
         void UpdateWareHouse(WareHouse WareHouse);
         void DeleteWareHouse(int id);
         IEnumerable<WareHouse> GetWareHousesByAddress(string Address);
+        IEnumerable<object> GetWareHouseWineDetails();
     }
 }
