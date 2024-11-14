@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace BusinessObjects;
+namespace BusinessObjects.Entities;
 
 public partial class Wine
 {
@@ -19,9 +19,13 @@ public partial class Wine
 
     public int? SupplierId { get; set; }
 
+    public string? Status { get; set; }
+
     public virtual Category? Category { get; set; }
 
     public virtual ICollection<RequestDetail> RequestDetails { get; set; } = new List<RequestDetail>();
 
     public virtual Supplier? Supplier { get; set; }
+
+    public virtual ICollection<WarehouseWine> WarehouseWines { get; set; } = new List<WarehouseWine>();
 }

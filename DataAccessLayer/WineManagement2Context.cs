@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using BusinessObjects.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
@@ -25,6 +26,10 @@ public partial class WineManagement2Context : DbContext
     public virtual DbSet<RequestDetail> RequestDetails { get; set; }
 
     public virtual DbSet<Supplier> Suppliers { get; set; }
+
+    public virtual DbSet<WareHouse> WareHouses { get; set; }
+
+    public virtual DbSet<WarehouseWine> WarehouseWines { get; set; }
 
     public virtual DbSet<Wine> Wines { get; set; }
 
@@ -56,6 +61,7 @@ public partial class WineManagement2Context : DbContext
             entity.Property(e => e.Email).HasMaxLength(100);
             entity.Property(e => e.PasswordHash).HasMaxLength(255);
             entity.Property(e => e.Role).HasMaxLength(10);
+            entity.Property(e => e.Status).HasMaxLength(50);
             entity.Property(e => e.Username).HasMaxLength(50);
         });
 
@@ -68,6 +74,7 @@ public partial class WineManagement2Context : DbContext
             entity.Property(e => e.CategoryId).HasColumnName("CategoryID");
             entity.Property(e => e.CategoryName).HasMaxLength(100);
             entity.Property(e => e.Description).HasMaxLength(255);
+            entity.Property(e => e.Status).HasMaxLength(100);
         });
 
         modelBuilder.Entity<Request>(entity =>
@@ -116,6 +123,52 @@ public partial class WineManagement2Context : DbContext
             entity.Property(e => e.Email).HasMaxLength(100);
             entity.Property(e => e.Name).HasMaxLength(100);
             entity.Property(e => e.Phone).HasMaxLength(15);
+            entity.Property(e => e.Status).HasMaxLength(100);
+        });
+
+        modelBuilder.Entity<WareHouse>(entity =>
+        {
+            entity.HasKey(e => e.WareHouseId).HasName("PK__WareHous__69FF8098C59E9395");
+
+            entity.ToTable("WareHouse");
+
+            entity.Property(e => e.WareHouseId).HasColumnName("WareHouseID");
+            entity.Property(e => e.Address)
+                .HasMaxLength(100)
+                .IsUnicode(false);
+            entity.Property(e => e.ContactPerson)
+                .HasMaxLength(100)
+                .IsUnicode(false);
+            entity.Property(e => e.Description)
+                .HasMaxLength(200)
+                .IsUnicode(false);
+            entity.Property(e => e.PhoneNumber)
+                .HasMaxLength(20)
+                .IsUnicode(false);
+            entity.Property(e => e.Status)
+                .HasMaxLength(20)
+                .IsUnicode(false);
+        });
+
+        modelBuilder.Entity<WarehouseWine>(entity =>
+        {
+            entity.HasKey(e => e.WarehouseWineId).HasName("PK__Warehous__099817CD645D4E62");
+
+            entity.ToTable("WarehouseWine");
+
+            entity.Property(e => e.WarehouseWineId).HasColumnName("WarehouseWineID");
+            entity.Property(e => e.WareHouseId).HasColumnName("WareHouseID");
+            entity.Property(e => e.WineId).HasColumnName("WineID");
+
+            entity.HasOne(d => d.WareHouse).WithMany(p => p.WarehouseWines)
+                .HasForeignKey(d => d.WareHouseId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__Warehouse__WareH__71D1E811");
+
+            entity.HasOne(d => d.Wine).WithMany(p => p.WarehouseWines)
+                .HasForeignKey(d => d.WineId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__Warehouse__WineI__72C60C4A");
         });
 
         modelBuilder.Entity<Wine>(entity =>
@@ -129,6 +182,7 @@ public partial class WineManagement2Context : DbContext
             entity.Property(e => e.CategoryId).HasColumnName("CategoryID");
             entity.Property(e => e.Name).HasMaxLength(100);
             entity.Property(e => e.Price).HasColumnType("decimal(10, 2)");
+            entity.Property(e => e.Status).HasMaxLength(50);
             entity.Property(e => e.SupplierId).HasColumnName("SupplierID");
 
             entity.HasOne(d => d.Category).WithMany(p => p.Wines)

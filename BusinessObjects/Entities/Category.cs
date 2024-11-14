@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace BusinessObjects;
+namespace BusinessObjects.Entities;
 
 public partial class Category
 {
@@ -10,6 +10,8 @@ public partial class Category
     public string CategoryName { get; set; } = null!;
 
     public string? Description { get; set; }
+
+    public string? Status { get; set; }
 
     public virtual ICollection<Wine> Wines { get; set; } = new List<Wine>();
 }

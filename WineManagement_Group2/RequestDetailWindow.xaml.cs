@@ -1,5 +1,6 @@
 ﻿using Azure.Core;
 using BusinessObjects;
+using BusinessObjects.Entities;
 using DataAccessLayer;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -166,7 +167,7 @@ namespace WineWarehouseManagement
             try
             {
                 // Create a new request
-                var request = new BusinessObjects.Request
+                var request = new BusinessObjects.Entities.Request
                 {
                     AccountId = accountId, // Set AccountId
                     Status = "Pending" // Default status

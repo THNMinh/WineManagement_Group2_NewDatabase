@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace BusinessObjects;
+namespace BusinessObjects.Entities;
 
 public partial class Account
 {
@@ -14,6 +14,8 @@ public partial class Account
     public string Email { get; set; } = null!;
 
     public string Role { get; set; } = null!;
+
+    public string? Status { get; set; }
 
     public virtual ICollection<Request> Requests { get; set; } = new List<Request>();
 }

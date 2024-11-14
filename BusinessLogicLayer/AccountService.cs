@@ -1,4 +1,5 @@
 ﻿using BusinessObjects;
+using BusinessObjects.Entities;
 using DataAccessLayer;
 using System;
 using System.Collections.Generic;

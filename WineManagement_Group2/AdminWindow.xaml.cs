@@ -1,4 +1,5 @@
 ﻿using BusinessObjects;
+using BusinessObjects.Entities;
 using DataAccessLayer;
 using Microsoft.EntityFrameworkCore;
 using System;
