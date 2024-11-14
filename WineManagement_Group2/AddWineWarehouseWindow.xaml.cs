@@ -1,4 +1,5 @@
-﻿using BusinessObjects.Entities;
+﻿using BusinessObjects;
+using BusinessObjects.Entities;
 using DataAccessLayer;
 using System;
 using System.Collections.Generic;
@@ -95,25 +96,35 @@ namespace WineWarehouseManagement
             var viewModel = (AddWineWarehouseViewModel)DataContext;
             viewModel.SelectedWineId = int.Parse(WineIDTextBox.Text);
             viewModel.SelectedWareHouseId = int.Parse(WareHouseTextBox.Text);
+
             // Check if both IDs are selected
             if (viewModel.SelectedWineId.HasValue && viewModel.SelectedWareHouseId.HasValue)
             {
-                var newWarehouseWine = new WarehouseWine
+                // Check for duplicate entry before adding
+                if (!DuplicateWarehouseWineExists(viewModel.SelectedWineId.Value, viewModel.SelectedWareHouseId.Value))
                 {
-                    WareHouseId = viewModel.SelectedWareHouseId.Value,
-                    WineId = viewModel.SelectedWineId.Value,
-                    Quantity = int.Parse(QuantityBox.Text), // Access quantity from ViewModel
-                    Description = DescriptionBox.Text // Access description from ViewModel
-                };
+                    var newWarehouseWine = new WarehouseWine
+                    {
+                        WareHouseId = viewModel.SelectedWareHouseId.Value,
+                        WineId = viewModel.SelectedWineId.Value,
+                        Quantity = int.Parse(QuantityBox.Text), // Access quantity from ViewModel
+                        Description = DescriptionBox.Text // Access description from ViewModel
+                    };
 
-                _repo.AddWarehouseWine(newWarehouseWine); // Add new WarehouseWine object to repository
-                // Save changes to the database (assuming you have a SaveChanges method)
+                    _repo.AddWarehouseWine(newWarehouseWine); // Add new WarehouseWine object to repository
+                                                              // Save changes to the database (assuming you have a SaveChanges method)
 
-                // Clear selection and input fields (optional)
-                viewModel.SelectedWineId = null;
-                viewModel.SelectedWareHouseId = null;
-                viewModel.Quantity = 0;
-                viewModel.Description = "";
+                    // Clear selection and input fields (optional)
+                    viewModel.SelectedWineId = null;
+                    viewModel.SelectedWareHouseId = null;
+                    viewModel.Quantity = 0;
+                    viewModel.Description = "";
+                }
+                else
+                {
+                    // Show error message about duplicate entry
+                    MessageBox.Show("This wine already exists in the selected warehouse.");
+                }
             }
             else
             {
@@ -121,6 +132,43 @@ namespace WineWarehouseManagement
                 MessageBox.Show("Please select a Wine and Warehouse from the DataGrids.");
             }
 
+            //var viewModel = (AddWineWarehouseViewModel)DataContext;
+            //viewModel.SelectedWineId = int.Parse(WineIDTextBox.Text);
+            //viewModel.SelectedWareHouseId = int.Parse(WareHouseTextBox.Text);
+            //// Check if both IDs are selected
+            //if (viewModel.SelectedWineId.HasValue && viewModel.SelectedWareHouseId.HasValue)
+            //{
+            //    var newWarehouseWine = new WarehouseWine
+            //    {
+            //        WareHouseId = viewModel.SelectedWareHouseId.Value,
+            //        WineId = viewModel.SelectedWineId.Value,
+            //        Quantity = int.Parse(QuantityBox.Text), // Access quantity from ViewModel
+            //        Description = DescriptionBox.Text // Access description from ViewModel
+            //    };
+
+            //    _repo.AddWarehouseWine(newWarehouseWine); // Add new WarehouseWine object to repository
+            //    // Save changes to the database (assuming you have a SaveChanges method)
+
+            //    // Clear selection and input fields (optional)
+            //    viewModel.SelectedWineId = null;
+            //    viewModel.SelectedWareHouseId = null;
+            //    viewModel.Quantity = 0;
+            //    viewModel.Description = "";
+            //}
+            //else
+            //{
+            //    // Show error message if no selection is made
+            //    MessageBox.Show("Please select a Wine and Warehouse from the DataGrids.");
+            //}
+
+        }
+
+        private bool DuplicateWarehouseWineExists(int wineId, int warehouseId)
+        {
+            using (var db = new WineManagement2Context())
+            {
+                return db.WarehouseWines.Any(ww => ww.WineId == wineId && ww.WareHouseId == warehouseId);
+            }
         }
 
         private void DeleteButton_Click(object sender, RoutedEventArgs e)
