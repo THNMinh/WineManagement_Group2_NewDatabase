@@ -4,117 +4,128 @@ using DataAccessLayer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace WineWarehouseManagement
 {
-    /// <summary>
-    /// Interaction logic for AddWineWarehouseWindow.xaml
-    /// </summary>
     public partial class AddWineWarehouseWindow : Window
     {
         private readonly IWareHouseRepository _wareHouseDAO;
         private readonly IWineRepository _wineDAO;
         private readonly IWarehouseWineRepository _repo;
+
         public AddWineWarehouseWindow()
         {
             InitializeComponent();
             _wareHouseDAO = new WareHouseDAO();
             _wineDAO = new WineDAO();
             _repo = new WarehouseWineDAO();
+
             DataContext = new AddWineWarehouseViewModel();
-            LoadWareHouseList();
-            LoadWinefList();
+            LoadWareHouseWineList();
+            LoadWineList();
+            LoadWarehouseList();
+            LoadLocationList();
+        }
+        private void LoadLocationList()
+        {
+            LocationComboBox.ItemsSource = _wareHouseDAO.GetAllWareHouses();
         }
 
-        private void LoadWareHouseList()
+        private void SearchButton_Click(object sender, RoutedEventArgs e)
         {
-            WarehouseDataGrid.ItemsSource = _wareHouseDAO.GetAllWareHouses();
+            if (LocationComboBox.SelectedValue is string selectedLocation)
+            {
+                // Fetch all details and then filter by the selected location
+                var allDetails = _wareHouseDAO.GetWareHouseWineDetails();
+
+                // Apply the location filter
+                var filteredDetails = allDetails
+                    .Where(ww => ww.GetType().GetProperty("Location")?.GetValue(ww)?.ToString() == selectedLocation)
+                    .ToList();
+
+                // Bind the filtered data to the DataGrid
+                WareHousesDataGrid.ItemsSource = filteredDetails;
+            }
+            else
+            {
+                MessageBox.Show("Please select a location to search.");
+            }
         }
 
-        private void LoadWinefList()
+
+
+        private void LoadWareHouseWineList()
         {
-            // Loads only accounts with "Staff" role into the DataGrid
-            WineDataGrid.ItemsSource = _wineDAO.GetAllWines();
+            WareHousesDataGrid.ItemsSource = _wareHouseDAO.GetWareHouseWineDetails();
+        }
+
+        private void LoadWineList()
+        {
+            WineComboBox.ItemsSource = _wineDAO.GetAllWines();
+        }
+
+        private void LoadWarehouseList()
+        {
+            WarehouseComboBox.ItemsSource = _wareHouseDAO.GetAllWareHouses();
         }
 
         public class AddWineWarehouseViewModel
         {
             public int? SelectedWineId { get; set; }
             public int? SelectedWareHouseId { get; set; }
-            public int Quantity { get; set; } // Add a property for quantity
-            public string Description { get; set; } // Add a property for description
+            public int Quantity { get; set; }
+            public string Description { get; set; }
 
             public AddWineWarehouseViewModel()
             {
                 SelectedWineId = null;
                 SelectedWareHouseId = null;
-                Quantity = 0; // Set default quantity
-                Description = ""; // Set default description
+                Quantity = 0;
+                Description = "";
             }
         }
 
-        private void dgData_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void WareHousesDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (WineDataGrid.SelectedItem is Wine selectedWine)
+            if (WareHousesDataGrid.SelectedItem is WarehouseWine selectedWarehouseWine)
             {
+                var viewModel = (AddWineWarehouseViewModel)DataContext;
+                viewModel.SelectedWineId = selectedWarehouseWine.WineId;
+                viewModel.SelectedWareHouseId = selectedWarehouseWine.WareHouseId;
+                viewModel.Quantity = selectedWarehouseWine.Quantity.Value;
+                viewModel.Description = selectedWarehouseWine.Description;
 
-                WineIDTextBox.Text = selectedWine.WineId.ToString();
-             }
-
-
-        }
-
-        private void dgData_SelectionChangedForWAREHOUSE(object sender, SelectionChangedEventArgs e)
-        {
-            if (WarehouseDataGrid.SelectedItem is WareHouse selectedWine)
-            {
-
-                WareHouseTextBox.Text = selectedWine.WareHouseId.ToString();
+                WineComboBox.SelectedValue = viewModel.SelectedWineId;
+                WarehouseComboBox.SelectedValue = viewModel.SelectedWareHouseId;
+                QuantityBox.Text = viewModel.Quantity.ToString();
+                DescriptionBox.Text = viewModel.Description;
             }
-
-
-        }
-
-        private void UpdateButton_Click(object sender, RoutedEventArgs e)
-        {
-
         }
 
         private void CreateButton_Click(object sender, RoutedEventArgs e)
         {
-
             var viewModel = (AddWineWarehouseViewModel)DataContext;
-            viewModel.SelectedWineId = int.Parse(WineIDTextBox.Text);
-            viewModel.SelectedWareHouseId = int.Parse(WareHouseTextBox.Text);
 
             // Check if both IDs are selected
             if (viewModel.SelectedWineId.HasValue && viewModel.SelectedWareHouseId.HasValue)
             {
                 // Check for duplicate entry before adding
-                if (!DuplicateWarehouseWineExists(viewModel.SelectedWineId.Value, viewModel.SelectedWareHouseId.Value))
+                if (!DuplicateWarehouseWineExists(viewModel.SelectedWineId.Value))
                 {
                     var newWarehouseWine = new WarehouseWine
                     {
                         WareHouseId = viewModel.SelectedWareHouseId.Value,
                         WineId = viewModel.SelectedWineId.Value,
-                        Quantity = int.Parse(QuantityBox.Text), // Access quantity from ViewModel
-                        Description = DescriptionBox.Text // Access description from ViewModel
+                        Quantity = viewModel.Quantity,
+                        Description = viewModel.Description
                     };
 
-                    _repo.AddWarehouseWine(newWarehouseWine); // Add new WarehouseWine object to repository
-                                                              // Save changes to the database (assuming you have a SaveChanges method)
+                    _repo.AddWarehouseWine(newWarehouseWine);
+                    LoadWareHouseWineList(); // Refresh the list after adding
 
-                    // Clear selection and input fields (optional)
+                    // Clear selection and input fields
                     viewModel.SelectedWineId = null;
                     viewModel.SelectedWareHouseId = null;
                     viewModel.Quantity = 0;
@@ -122,63 +133,86 @@ namespace WineWarehouseManagement
                 }
                 else
                 {
-                    // Show error message about duplicate entry
-                    MessageBox.Show("This wine already exists in the selected warehouse.");
+                    MessageBox.Show("This wine already exists in warehouse.");
                 }
             }
             else
             {
-                // Show error message if no selection is made
-                MessageBox.Show("Please select a Wine and Warehouse from the DataGrids.");
+                MessageBox.Show("Please select a Wine and Warehouse from the dropdowns.");
             }
-
-            //var viewModel = (AddWineWarehouseViewModel)DataContext;
-            //viewModel.SelectedWineId = int.Parse(WineIDTextBox.Text);
-            //viewModel.SelectedWareHouseId = int.Parse(WareHouseTextBox.Text);
-            //// Check if both IDs are selected
-            //if (viewModel.SelectedWineId.HasValue && viewModel.SelectedWareHouseId.HasValue)
-            //{
-            //    var newWarehouseWine = new WarehouseWine
-            //    {
-            //        WareHouseId = viewModel.SelectedWareHouseId.Value,
-            //        WineId = viewModel.SelectedWineId.Value,
-            //        Quantity = int.Parse(QuantityBox.Text), // Access quantity from ViewModel
-            //        Description = DescriptionBox.Text // Access description from ViewModel
-            //    };
-
-            //    _repo.AddWarehouseWine(newWarehouseWine); // Add new WarehouseWine object to repository
-            //    // Save changes to the database (assuming you have a SaveChanges method)
-
-            //    // Clear selection and input fields (optional)
-            //    viewModel.SelectedWineId = null;
-            //    viewModel.SelectedWareHouseId = null;
-            //    viewModel.Quantity = 0;
-            //    viewModel.Description = "";
-            //}
-            //else
-            //{
-            //    // Show error message if no selection is made
-            //    MessageBox.Show("Please select a Wine and Warehouse from the DataGrids.");
-            //}
-
         }
 
-        private bool DuplicateWarehouseWineExists(int wineId, int warehouseId)
+        private bool DuplicateWarehouseWineExists(int wineId)
         {
             using (var db = new WineManagement2Context())
             {
-                return db.WarehouseWines.Any(ww => ww.WineId == wineId && ww.WareHouseId == warehouseId);
+                return db.WarehouseWines.Any(ww => ww.WineId == wineId);
             }
         }
 
+        private void UpdateButton_Click(object sender, RoutedEventArgs e)
+        {
+            var viewModel = (AddWineWarehouseViewModel)DataContext;
+
+            // Check if all required fields have values
+            if (!viewModel.SelectedWineId.HasValue || !viewModel.SelectedWareHouseId.HasValue || viewModel.Quantity <= 0 || string.IsNullOrWhiteSpace(viewModel.Description))
+            {
+                MessageBox.Show("Please make sure no field is empty and quantity is greater than 0.");
+                return;
+            }
+
+            // Ensure an item is selected in the DataGrid for update
+            if (WareHousesDataGrid.SelectedItem is WarehouseWine selectedWarehouseWine)
+            {
+                if (!DuplicateWarehouseWineExists(viewModel.SelectedWineId.Value))
+                {
+                    // Update the selected WarehouseWine details with values from the view model
+                    selectedWarehouseWine.WineId = viewModel.SelectedWineId.Value;
+                    selectedWarehouseWine.WareHouseId = viewModel.SelectedWareHouseId.Value;
+                    selectedWarehouseWine.Quantity = viewModel.Quantity;
+                    selectedWarehouseWine.Description = viewModel.Description;
+
+                    // Call repository update method
+                    _repo.UpdateWarehouseWine(selectedWarehouseWine);
+
+                    // Refresh the data grid to show updated information
+                    LoadWareHouseWineList();
+
+                    // Clear the fields after updating
+                    viewModel.SelectedWineId = null;
+                    viewModel.SelectedWareHouseId = null;
+                    viewModel.Quantity = 0;
+                    viewModel.Description = "";
+
+                    MessageBox.Show("Warehouse-Wine record updated successfully.");
+                }
+                else
+                {
+                    MessageBox.Show("This wine already exists in warehouse.");
+                }
+            }
+            else
+            {
+                MessageBox.Show("Please select a Warehouse-Wine record to update.");
+            }
+        }
+
+
         private void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
-
+            if (WareHousesDataGrid.SelectedItem is WarehouseWine selectedWarehouseWine)
+            {
+                _repo.DeleteWarehouseWine(selectedWarehouseWine.WarehouseWineId);
+                LoadWareHouseWineList(); // Refresh the list after deleting
+            }
+            else
+            {
+                MessageBox.Show("Please select a Warehouse-Wine record to delete.");
+            }
         }
 
         private void BacktoManagerHomePage_click(object sender, RoutedEventArgs e)
         {
-
             ManagerHomePageWindow managerWindow = new ManagerHomePageWindow();
             managerWindow.Show();
             this.Close();

@@ -15,7 +15,6 @@
     </Window.Background>
     <Grid>
         <Grid Margin="10">
-            <!-- Layout Definition -->
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
@@ -31,24 +30,23 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <!-- Staff Name -->
-            <Label Grid.Row="0" Grid.Column="0" Content="Wine ID:" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
-            <TextBox x:Name="WineIDTextBox" Grid.Row="0" Grid.Column="1" Width="200" Margin="10,5,489,5" Text="{Binding SelectedWineId}"/>
+            <Label Grid.Row="0" Grid.Column="0" Content="Wine:" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
+            <ComboBox x:Name="WineComboBox" Grid.Row="0" Grid.Column="1" Margin="67,5,582,5" 
+          ItemsSource="{Binding Wines}" DisplayMemberPath="Name" SelectedValuePath="WineId"
+          SelectedValue="{Binding SelectedWineId, Mode=TwoWay}"/>
 
-            <!-- Staff Email -->
-            <Label Grid.Column="1" Content="Warehouse ID:" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="376,0,0,0"/>
-            <TextBox x:Name="WareHouseTextBox" Grid.Column="1" Width="200" Margin="449,5,50,5" Text="{Binding SelectedWareHouseId}"/>
+            <Label Grid.Column="1" Content="Warehouse:" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="377,3,0,0"/>
+            <ComboBox x:Name="WarehouseComboBox" Grid.Column="1" Margin="474,7,149,3"
+          ItemsSource="{Binding Warehouses}" DisplayMemberPath="Location" SelectedValuePath="WareHouseId"
+          SelectedValue="{Binding SelectedWareHouseId, Mode=TwoWay}"/>
 
-            <!-- Phone -->
             <Label Grid.Row="2" Grid.Column="0" Content="Quantity:" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
-            <TextBox x:Name="QuantityBox" Grid.Row="2" Grid.Column="1" Width="200" Margin="10,10,489,36" Grid.RowSpan="2"/>
+            <TextBox x:Name="QuantityBox" Grid.Row="2" Grid.Column="1" Margin="67,10,582,24" Grid.RowSpan="2"/>
 
-            <!-- Address -->
             <Label Grid.Row="2" Grid.Column="1" Content="Description:" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,8,363,0"/>
 
-            <TextBox x:Name="DescriptionBox" Grid.Row="2" Grid.Column="1"  Width="200" Margin="449,7,50,3"></TextBox>
+            <TextBox x:Name="DescriptionBox" Grid.Row="2" Grid.Column="1" Margin="474,7,149,3"/>
 
-            <!-- CRUD Buttons -->
             <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Left" Margin="158,4,0,14" Grid.RowSpan="2" Grid.Column="1">
 
                 <Button Content="Update" Width="80" Margin="5" Click="UpdateButton_Click" Background="#FF00A2FF"/>
@@ -58,27 +56,27 @@
 
             </StackPanel>
 
-            <!-- DataGrid for displaying staff -->
-            <DataGrid x:Name="WineDataGrid" Grid.Row="4" Grid.ColumnSpan="2" AutoGenerateColumns="False" CanUserAddRows="False" Margin="14,22,552,7" IsReadOnly="True" Grid.RowSpan="2" SelectionChanged="dgData_SelectionChanged" >
+            <DataGrid x:Name="WareHousesDataGrid" Grid.Row="5" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True" Grid.ColumnSpan="2" SelectionChanged="WareHousesDataGrid_SelectionChanged" Margin="0,66,0,0">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Wine ID" Binding="{Binding WineId}" Width="Auto" />
-                    <DataGridTextColumn Header="Wine Name" Binding="{Binding Name}" Width="*" />
-                    <DataGridTextColumn Header="Supplier Name" Binding="{Binding Supplier.Name}" Width="*" />
-                </DataGrid.Columns>
-            </DataGrid>
-            <DataGrid x:Name="WarehouseDataGrid" Grid.Row="5" AutoGenerateColumns="False" CanUserAddRows="False" Margin="269,0,10,7" IsReadOnly="True" Grid.Column="1" SelectionChanged="dgData_SelectionChangedForWAREHOUSE">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="Location" Binding="{Binding Location}" Width="Auto" />
+                    <DataGridTextColumn Header="Wine Name" Binding="{Binding WineName}" Width="*" />
+                    <DataGridTextColumn Header="WareHouse Address" Binding="{Binding Address}" Width="*" />
+                    <DataGridTextColumn Header="Contact Person" Binding="{Binding ContactPerson}" Width="*" />
                     <DataGridTextColumn Header="Phone Number" Binding="{Binding PhoneNumber}" Width="*" />
-                    <DataGridTextColumn Header="Address" Binding="{Binding Address}" Width="*" />
+                    <DataGridTextColumn Header="Location" Binding="{Binding Location}" Width="*" />
+                    <DataGridTextColumn Header="Quantity" Binding="{Binding Quantity}" Width="*" />
+                    <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="*" />
                 </DataGrid.Columns>
             </DataGrid>
 
-
-
-
-            <!-- Save Changes Button -->
             <Button Grid.Row="6" Grid.ColumnSpan="2" Content="Back to Manager Page" Width="181" Margin="0,10,0,10" HorizontalAlignment="Center" Click="BacktoManagerHomePage_click" Background="#FFB2FF60" BorderBrush="#FFDA9393" Foreground="Black"/>
+
+            <Label Grid.Row="5" Grid.Column="0" Content="Search by Location:" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,10,758,0" Grid.ColumnSpan="2" Height="51"/>
+            <ComboBox x:Name="LocationComboBox" Grid.Row="5" Grid.Column="1" Margin="67,12,582,193"
+          ItemsSource="{Binding Locations}" DisplayMemberPath="Location" SelectedValuePath="Location"
+          SelectedValue="{Binding SelectedLocation, Mode=TwoWay}"/>
+
+            <Button Content="Search" Margin="263,12,488,188" Click="SearchButton_Click" Background="#FFA9A9FF" Grid.Row="5" Grid.Column="1"/>
+
         </Grid>
 
 
