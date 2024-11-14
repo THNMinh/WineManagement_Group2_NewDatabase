@@ -69,5 +69,9 @@
         </TabControl>
         <Button Content="Back to manager home page" Click="BacktoManagerHomePage_click" Margin="599,5,21,371" Background="#FFE99EFF"/>
 
+        <TextBox x:Name="txtSearch" HorizontalAlignment="Left" Height="41" Margin="468,86,0,0" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Width="221"/>
+        <Button Content="Search" HorizontalAlignment="Left" Height="45" Margin="695,84,0,0" VerticalAlignment="Top" Width="95" Click="btn_Search"/>
+        <Label Content="Search By Wine" FontSize="16" HorizontalAlignment="Center" Height="32" Margin="0,91,0,0" VerticalAlignment="Top" Width="122"/>
+
     </Grid>
 </Window>

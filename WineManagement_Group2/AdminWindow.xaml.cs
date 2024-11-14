@@ -316,9 +316,9 @@ namespace WineWarehouseManagement
         {
             WareHouseDataGrid.ItemsSource = _wareHouseDAO.GetAllWareHouses();
         }
-        private bool IsAddressUnique(string Address)
+        private bool IsLocationUnique(string Location)
         {
-            return !_wareHouseDAO.GetAllWareHouses().Any(wareHouse => wareHouse.Address.Equals(Address, StringComparison.OrdinalIgnoreCase));
+            return !_wareHouseDAO.GetAllWareHouses().Any(wareHouse => wareHouse.Location.Equals(Location, StringComparison.OrdinalIgnoreCase));
         }
 
         private bool IsValidPhoneNumber(string PhoneNumber)
@@ -339,9 +339,9 @@ namespace WineWarehouseManagement
                 return;
             }
 
-            if (!IsAddressUnique(WareHouseAddressTextBox.Text))
+            if (!IsLocationUnique(LocationTextBox.Text))
             {
-                MessageBox.Show("This address is already in have. Please use a different address.", "Duplicate Address", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("This location is already in have. Please use a different location.", "Duplicate Location", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
@@ -378,9 +378,9 @@ namespace WineWarehouseManagement
 
             if (WareHouseDataGrid.SelectedItem is WareHouse selectedWareHouse)
             {
-                if (!IsAddressUnique(WareHouseAddressTextBox.Text))
+                if (!IsLocationUnique(LocationTextBox.Text))
                 {
-                    MessageBox.Show("This address is already in have. Please use a different address.", "Duplicate Address", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBox.Show("This location is already in have. Please use a different location.", "Duplicate Location", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
 
