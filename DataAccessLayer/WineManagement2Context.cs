@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using BusinessObjects.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace BusinessObjects;
 
@@ -34,7 +35,16 @@ public partial class WineManagement2Context : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=MSI\\MSSQL2022EXPRESS;uid=sa;pwd=12345;database=WineManagement_2;TrustServerCertificate=True");
+        => optionsBuilder.UseSqlServer(GetConnectionString());//"Server=SANGNT20072004;Database=WineManagement_2; Uid=sa; Pwd=1234567890;TrustServerCertificate=true");
+
+    private string GetConnectionString()
+    {
+        IConfiguration configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json")
+                .Build();
+        return configuration["ConnectionStrings:DB"];
+    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -56,7 +66,7 @@ public partial class WineManagement2Context : DbContext
 
         modelBuilder.Entity<Category>(entity =>
         {
-            entity.HasKey(e => e.CategoryId).HasName("PK__Category__19093A2B16537741");
+            entity.HasKey(e => e.CategoryId).HasName("PK__Category__19093A2B2DFB7C78");
 
             entity.ToTable("Category");
 
@@ -83,7 +93,7 @@ public partial class WineManagement2Context : DbContext
 
         modelBuilder.Entity<RequestDetail>(entity =>
         {
-            entity.HasKey(e => e.RequestDetailId).HasName("PK__RequestD__DC528B7045A62AB8");
+            entity.HasKey(e => e.RequestDetailId).HasName("PK__RequestD__DC528B70C9A6FB81");
 
             entity.ToTable("RequestDetail");
 
@@ -97,12 +107,12 @@ public partial class WineManagement2Context : DbContext
 
             entity.HasOne(d => d.Wine).WithMany(p => p.RequestDetails)
                 .HasForeignKey(d => d.WineId)
-                .HasConstraintName("FK__RequestDe__WineI__440B1D61");
+                .HasConstraintName("FK__RequestDe__WineI__20C1E124");
         });
 
         modelBuilder.Entity<Supplier>(entity =>
         {
-            entity.HasKey(e => e.SupplierId).HasName("PK__Supplier__4BE66694108989F8");
+            entity.HasKey(e => e.SupplierId).HasName("PK__Supplier__4BE666945DD01692");
 
             entity.ToTable("Supplier");
 
@@ -141,7 +151,7 @@ public partial class WineManagement2Context : DbContext
 
         modelBuilder.Entity<WarehouseWine>(entity =>
         {
-            entity.HasKey(e => e.WarehouseWineId).HasName("PK__Warehous__099817CD645D4E62");
+            entity.HasKey(e => e.WarehouseWineId).HasName("PK__Warehous__099817CDC48B82A3");
 
             entity.ToTable("WarehouseWine");
 
@@ -158,12 +168,12 @@ public partial class WineManagement2Context : DbContext
             entity.HasOne(d => d.Wine).WithMany(p => p.WarehouseWines)
                 .HasForeignKey(d => d.WineId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Warehouse__WineI__72C60C4A");
+                .HasConstraintName("FK__Warehouse__WineI__22AA2996");
         });
 
         modelBuilder.Entity<Wine>(entity =>
         {
-            entity.HasKey(e => e.WineId).HasName("PK__Wine__ABB24B3140A19FB5");
+            entity.HasKey(e => e.WineId).HasName("PK__Wine__ABB24B3178FC1D24");
 
             entity.ToTable("Wine");
 
@@ -177,11 +187,11 @@ public partial class WineManagement2Context : DbContext
 
             entity.HasOne(d => d.Category).WithMany(p => p.Wines)
                 .HasForeignKey(d => d.CategoryId)
-                .HasConstraintName("FK__Wine__CategoryID__44FF419A");
+                .HasConstraintName("FK__Wine__CategoryID__239E4DCF");
 
             entity.HasOne(d => d.Supplier).WithMany(p => p.Wines)
                 .HasForeignKey(d => d.SupplierId)
-                .HasConstraintName("FK__Wine__SupplierID__45F365D3");
+                .HasConstraintName("FK__Wine__SupplierID__24927208");
         });
 
         OnModelCreatingPartial(modelBuilder);

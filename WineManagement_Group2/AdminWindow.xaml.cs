@@ -15,13 +15,16 @@ namespace WineWarehouseManagement
     public partial class AdminWindow : Window
     {
         private readonly IAccountRepository _accountDAO;
+        private readonly IWareHouseRepository _wareHouseDAO;
 
         public AdminWindow()
         {
             InitializeComponent();
             _accountDAO = new AccountDAO();
+            _wareHouseDAO = new WareHouseDAO();
             LoadStaffList();
             LoadManagerList();
+            LoadWareHouseList();
         }
 
         private void LoadStaffList()
@@ -30,7 +33,7 @@ namespace WineWarehouseManagement
             StaffDataGrid.ItemsSource = _accountDAO.GetAccountsByRole("Staff");
         }
 
-        
+
 
         private bool IsValidGmail(string email)
         {
@@ -75,7 +78,7 @@ namespace WineWarehouseManagement
             };
 
 
-                _accountDAO.AddAccount(newStaff);
+            _accountDAO.AddAccount(newStaff);
             LoadStaffList();
             ClearStaffFields();
         }
@@ -133,13 +136,7 @@ namespace WineWarehouseManagement
 
         private void DeleteStaffButton_Click(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(StaffNameTextBox.Text) ||
-           string.IsNullOrWhiteSpace(StaffEmailTextBox.Text) ||
-           string.IsNullOrWhiteSpace(StaffPasswordBox.Text))
-            {
-                MessageBox.Show("Please fill in all required fields (Name, Email, and Password).", "Missing Information", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
+
             MessageBoxResult result = MessageBox.Show("Are you sure you want to delete this staff?", "Delete Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Warning);
             if (result == MessageBoxResult.Yes)
             {
@@ -281,14 +278,7 @@ namespace WineWarehouseManagement
         // Delete selected manager
         private void DeleteManagerButton_Click(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(ManagerNameTextBox.Text) ||
-                    string.IsNullOrWhiteSpace(ManagerEmailTextBox.Text) ||
-                    string.IsNullOrWhiteSpace(ManagerPasswordTextBox.Text))
-            {
-                MessageBox.Show("Please fill in all required fields (Name, Email, and Password).", "Missing Information", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-            MessageBoxResult result = MessageBox.Show("Are you sure you want to delete this request detail?", "Delete Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            MessageBoxResult result = MessageBox.Show("Are you sure you want to delete this Account?", "Delete Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Warning);
             if (result == MessageBoxResult.Yes)
             {
                 if (ManagerDataGrid.SelectedItem is Account selectedManager)
@@ -312,6 +302,143 @@ namespace WineWarehouseManagement
             ManagerPasswordTextBox.Clear();
             ManagerRoleComboBox.SelectedIndex = -1;
         }
+
+        // WareHouse
+        private void ClearWareHouseFields()
+        {
+            WareHouseAddressTextBox.Clear();
+            LocationTextBox.Clear();
+            ContactPersonTextBox.Clear();
+            PhoneNumberTextBox.Clear();
+        }
+
+        private void LoadWareHouseList()
+        {
+            WareHouseDataGrid.ItemsSource = _wareHouseDAO.GetAllWareHouses();
+        }
+        private bool IsAddressUnique(string Address)
+        {
+            return !_wareHouseDAO.GetAllWareHouses().Any(wareHouse => wareHouse.Address.Equals(Address, StringComparison.OrdinalIgnoreCase));
+        }
+
+        private bool IsValidPhoneNumber(string PhoneNumber)
+        {
+            var PhoneNumberRegex = new Regex(@"^\d{10}$");
+            return PhoneNumberRegex.IsMatch(PhoneNumber);
+        }
+
+        // Create a new WareHouse
+        private void CreateWareHouseButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(WareHouseAddressTextBox.Text) ||
+                string.IsNullOrWhiteSpace(LocationTextBox.Text) ||
+                string.IsNullOrWhiteSpace(ContactPersonTextBox.Text) ||
+                string.IsNullOrWhiteSpace(PhoneNumberTextBox.Text))
+            {
+                MessageBox.Show("Please fill in all required fields.", "Missing Information", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            if (!IsAddressUnique(WareHouseAddressTextBox.Text))
+            {
+                MessageBox.Show("This address is already in have. Please use a different address.", "Duplicate Address", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            if (!IsValidPhoneNumber(PhoneNumberTextBox.Text))
+            {
+                MessageBox.Show("Please enter a valid Phone Number (e.g., 0525462579).", "Invalid Phone", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            WareHouse newWareHouse = new WareHouse
+            {
+                Address = WareHouseAddressTextBox.Text,
+                Status = "True",
+                ContactPerson = ContactPersonTextBox.Text,
+                PhoneNumber = PhoneNumberTextBox.Text,
+                Location = LocationTextBox.Text
+            };
+
+            _wareHouseDAO.AddWareHouse(newWareHouse);
+            LoadWareHouseList();
+            ClearWareHouseFields();
+        }
+
+        private void UpdateWareHouseButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(WareHouseAddressTextBox.Text) ||
+                string.IsNullOrWhiteSpace(LocationTextBox.Text) ||
+                string.IsNullOrWhiteSpace(ContactPersonTextBox.Text) ||
+                string.IsNullOrWhiteSpace(PhoneNumberTextBox.Text))
+            {
+                MessageBox.Show("Please fill in all required fields.", "Missing Information", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            if (WareHouseDataGrid.SelectedItem is WareHouse selectedWareHouse)
+            {
+                if (!IsAddressUnique(WareHouseAddressTextBox.Text))
+                {
+                    MessageBox.Show("This address is already in have. Please use a different address.", "Duplicate Address", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                if (!IsValidPhoneNumber(PhoneNumberTextBox.Text))
+                {
+                    MessageBox.Show("Please enter a valid Phone Number (e.g., 0525462579).", "Invalid Phone", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                var WareHouseToUpdate = _wareHouseDAO.GetWareHouseById(selectedWareHouse.WareHouseId);
+                if (WareHouseToUpdate != null)
+                {
+                    WareHouseToUpdate.Address = WareHouseAddressTextBox.Text;
+                    WareHouseToUpdate.ContactPerson = ContactPersonTextBox.Text;
+                    WareHouseToUpdate.PhoneNumber = PhoneNumberTextBox.Text;
+                    WareHouseToUpdate.Location = LocationTextBox.Text;
+
+                    _wareHouseDAO.UpdateWareHouse(WareHouseToUpdate);
+                    LoadWareHouseList();
+                    ClearWareHouseFields();
+                }
+            }
+            else
+            {
+                MessageBox.Show("Please select a valid WareHouse to update and ensure all fields are filled.");
+            }
+        }
+
+        private void DeleteWareHouseButton_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBoxResult result = MessageBox.Show("Are you sure you want to delete this WareHouse?", "Delete Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            if (result == MessageBoxResult.Yes)
+            {
+                if (WareHouseDataGrid.SelectedItem is WareHouse selectedWareHouse)
+                {
+                    var WareHouseToUpdate = _wareHouseDAO.GetWareHouseById(selectedWareHouse.WareHouseId);
+                    if (WareHouseToUpdate != null)
+                    {
+                        WareHouseToUpdate.Status = "False";
+
+                        _wareHouseDAO.UpdateWareHouse(WareHouseToUpdate);
+                        LoadWareHouseList();
+                        ClearWareHouseFields();
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Please select a manager to delete.");
+                }
+            }
+        }
+
+
+
+
+
+
+
 
         private void LogoutButton_Click(object sender, RoutedEventArgs e)
         {
@@ -352,6 +479,17 @@ namespace WineWarehouseManagement
 
         }
 
+        private void dgData_SelectionChangedForWareHouse(object sender, SelectionChangedEventArgs e)
+        {
+            if (ManagerDataGrid.SelectedItem is WareHouse selectedWareHouse)
+            {
+                WareHouseAddressTextBox.Text = selectedWareHouse.Address.ToString();
+                LocationTextBox.Text = selectedWareHouse.Location.ToString();
+                ContactPersonTextBox.Text = selectedWareHouse.ContactPerson.ToString();
+                PhoneNumberTextBox.Text = selectedWareHouse.PhoneNumber.ToString();
+            }
+        }
+
         private void btn_Search(object sender, RoutedEventArgs e)
         {
             string searchKeyword = string.Empty;
@@ -365,6 +503,10 @@ namespace WineWarehouseManagement
             {
                 searchKeyword = txtSearchManager.Text.Trim().ToLower();  // Tìm kiếm cho Manager
             }
+            else if (WareHouseTab.IsSelected)
+            {
+                searchKeyword = txtSearchWareHouse.Text.Trim().ToLower();
+            }
 
             // Nếu không có từ khóa tìm kiếm, tải lại danh sách tương ứng
             if (string.IsNullOrWhiteSpace(searchKeyword))
@@ -376,6 +518,10 @@ namespace WineWarehouseManagement
                 else if (ManagerTab.IsSelected)
                 {
                     LoadManagerList();
+                }
+                else if (WareHouseTab.IsSelected)
+                {
+                    LoadWareHouseList();
                 }
                 return;
             }
@@ -410,6 +556,22 @@ namespace WineWarehouseManagement
                 else
                 {
                     MessageBox.Show("No managers found with the specified name.", "Search Result", MessageBoxButton.OK, MessageBoxImage.Information);
+                    //ManagerDataGrid.ItemsSource = null; // Nếu không tìm thấy, không hiển thị kết quả
+                }
+            }
+            else if (WareHouseTab.IsSelected) // Nếu đang ở tab Manager
+            {
+                var result = _wareHouseDAO.GetAllWareHouses()
+                                        .Where(WareHouse => WareHouse.Address.ToLower().Contains(searchKeyword))
+                                        .ToList();
+
+                if (result.Any())
+                {
+                    WareHouseDataGrid.ItemsSource = result; // Hiển thị kết quả vào DataGrid
+                }
+                else
+                {
+                    MessageBox.Show("No WareHouses found with the specified address.", "Search Result", MessageBoxButton.OK, MessageBoxImage.Information);
                     //ManagerDataGrid.ItemsSource = null; // Nếu không tìm thấy, không hiển thị kết quả
                 }
             }
