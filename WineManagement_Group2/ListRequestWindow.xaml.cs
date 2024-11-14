@@ -49,13 +49,22 @@ namespace WineWarehouseManagement
         {
             try
             {
-                RequestsDataGrid.ItemsSource = GetRequestData();  // Bind data to RequestsDataGrid
+                var requestData = GetRequestData();
+                if (requestData != null && requestData.Count > 0)
+                {
+                    RequestsDataGrid.ItemsSource = requestData;
+                }
+                else
+                {
+                    MessageBox.Show("No data found.");
+                }
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Error loading request data: " + ex.Message);
             }
         }
+
 
 
         public class RequestData()
@@ -66,6 +75,7 @@ namespace WineWarehouseManagement
             public string WineName { get; set; }
             public int Quantity { get; set; }
             public string Status { get; set; }
+            public string Export { get; set; }
         }
 
         private List<RequestData> GetRequestData()
@@ -80,12 +90,19 @@ namespace WineWarehouseManagement
                     AccountId = rd.Request != null ? rd.Request.AccountId ?? 0 : 0,
                     WineName = rd.Wine != null ? rd.Wine.Name ?? "Unknown" : "Unknown",
                     Quantity = rd.Quantity,
-                    Status = rd.Request != null ? rd.Request.Status ?? "Unknown" : "Unknown"
+                    Status = rd.Request != null ? rd.Request.Status ?? "Unknown" : "Unknown",
+                    Export = rd.Request != null
+                        ? (rd.Request.Export.HasValue
+                            ? (rd.Request.Export.Value == true ? "Import" : "Export")
+                            : "Not Exported")
+                        : "Not Exported"
                 })
                 .ToList();
 
             return requestData;
         }
+
+
 
 
         //public void LoadRequest()

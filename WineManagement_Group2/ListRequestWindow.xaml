@@ -48,6 +48,7 @@
                         <DataGridTextColumn Header="Wine" Binding="{Binding WineName}" Width="*" />
                         <DataGridTextColumn Header="Quantity" Binding="{Binding Quantity}" Width="*" />
                         <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="*" />
+                        <DataGridTextColumn Header="Export" Binding="{Binding Export}" Width="*" />
                     </DataGrid.Columns>
                 </DataGrid>
             </TabItem>
