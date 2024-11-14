@@ -233,5 +233,51 @@ namespace WineWarehouseManagement
 
 
         }
+
+        private void btn_Search(object sender, RoutedEventArgs e)
+        {
+            string searchKeyword = txtSearch.Text.Trim().ToLower();
+
+            // Kiểm tra tab nào đang được chọn để tìm kiếm
+            if (WareHouseTab.IsSelected) // Kiểm tra xem tab Wines có đang được chọn hay không
+            {
+                // Tìm kiếm theo Wine Name
+                var result = _context.WarehouseWines.Where(w => w.Wine.Name.ToLower().Contains(searchKeyword)).Select(wine => new
+                {
+                    WineName = wine.Wine.Name,
+                    wine.WareHouse.Address,
+                    wine.WareHouse.ContactPerson,
+                    wine.WareHouse.PhoneNumber,
+                    wine.WareHouse.Location,
+                    wine.Quantity,
+                    wine.Description
+                }).ToList();
+
+
+                //var result = _context.Wines
+                //    .Where(w => w.Name.ToLower().Contains(searchKeyword))
+                //    .Select(wine => new
+                //    {
+                //        wine.Name,
+                //        wine.VintageYear,
+                //        wine.AlcoholContent,
+                //        wine.Price,
+                //        CategoryName = wine.Category != null ? wine.Category.CategoryName : "N/A"
+                //    })
+                //    .ToList();
+
+                WareHousesDataGrid.ItemsSource = result;
+            }
+            else if (RequestTab.IsSelected) // Kiểm tra xem tab Requests có đang được chọn hay không
+            {
+                // Tìm kiếm theo Wine Name trong danh sách Requests
+                var result = GetRequestData()
+                .Where(r => r.WineName.ToLower().Contains(searchKeyword))
+                .ToList();
+
+                RequestsDataGrid.ItemsSource = result;
+            }
+
+        }
     }
 }
