@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using BusinessObjects.Entities;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
 namespace BusinessObjects;
 
@@ -33,19 +32,9 @@ public partial class WineManagement2Context : DbContext
 
     public virtual DbSet<Wine> Wines { get; set; }
 
-    private string GetConnectionString()
-    {
-        IConfiguration config = new ConfigurationBuilder()
-             .SetBasePath(Directory.GetCurrentDirectory())
-                    .AddJsonFile("appsettings.json", true, true)
-                    .Build();
-        var strConn = config["ConnectionStrings:DB"];
-
-        return strConn;
-    }
-
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseSqlServer(GetConnectionString());
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer("Server=MSI\\MSSQL2022EXPRESS;uid=sa;pwd=12345;database=WineManagement_2;TrustServerCertificate=True");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -139,8 +128,8 @@ public partial class WineManagement2Context : DbContext
             entity.Property(e => e.ContactPerson)
                 .HasMaxLength(100)
                 .IsUnicode(false);
-            entity.Property(e => e.Description)
-                .HasMaxLength(200)
+            entity.Property(e => e.Location)
+                .HasMaxLength(100)
                 .IsUnicode(false);
             entity.Property(e => e.PhoneNumber)
                 .HasMaxLength(20)
@@ -157,6 +146,7 @@ public partial class WineManagement2Context : DbContext
             entity.ToTable("WarehouseWine");
 
             entity.Property(e => e.WarehouseWineId).HasColumnName("WarehouseWineID");
+            entity.Property(e => e.Description).HasMaxLength(200);
             entity.Property(e => e.WareHouseId).HasColumnName("WareHouseID");
             entity.Property(e => e.WineId).HasColumnName("WineID");
 

@@ -9,13 +9,13 @@ public partial class WareHouse
 
     public string Address { get; set; } = null!;
 
-    public string? Description { get; set; }
-
     public string? Status { get; set; }
 
     public string? ContactPerson { get; set; }
 
     public string? PhoneNumber { get; set; }
+
+    public string Location { get; set; } = null!;
 
     public virtual ICollection<WarehouseWine> WarehouseWines { get; set; } = new List<WarehouseWine>();
 }

@@ -11,6 +11,10 @@ public partial class WarehouseWine
 
     public int WineId { get; set; }
 
+    public int? Quantity { get; set; }
+
+    public string? Description { get; set; }
+
     public virtual WareHouse WareHouse { get; set; } = null!;
 
     public virtual Wine Wine { get; set; } = null!;
