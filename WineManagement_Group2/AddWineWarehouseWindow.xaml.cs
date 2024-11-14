@@ -131,6 +131,9 @@ namespace WineWarehouseManagement
         private void BacktoManagerHomePage_click(object sender, RoutedEventArgs e)
         {
 
+            ManagerHomePageWindow managerWindow = new ManagerHomePageWindow();
+            managerWindow.Show();
+            this.Close();
         }
     }
 }

@@ -50,6 +50,10 @@ namespace WineWarehouseManagement
             this.Close();
         }
 
-     
+        private void btnAddWineWarehouse(object sender, RoutedEventArgs e)
+        {
+            new AddWineWarehouseWindow().Show();
+            this.Close();
+        }
     }
 }
