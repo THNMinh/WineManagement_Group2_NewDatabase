@@ -5,15 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WineWarehouseManagement"
         mc:Ignorable="d"
-        Title="WineManagement" Height="528" Width="800">
+        Title="WineManagement" Height="528" Width="800"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize"
+        Background="#FAF0E6">
     <Grid>
         <TabControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-            <TabControl.Background>
-                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                    <GradientStop Color="#FFAA1BFF"/>
-                    <GradientStop Color="#FFFF0078" Offset="1"/>
-                </LinearGradientBrush>
-            </TabControl.Background>
             <!-- Staff Tab -->
             <TabItem Header="Manage Wine">
                 <Grid Margin="10" OpacityMask="#FFAA1BFF">
@@ -30,16 +27,16 @@
 
                     <StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Left" Grid.ColumnSpan="2">
                         <TextBlock Text="Wine Name:" VerticalAlignment="Center" Margin="5" />
-                        <TextBox x:Name="WineNameTextBox" Width="205" Margin="5" Height="18" />
+                        <TextBox x:Name="WineNameTextBox" Width="205" Margin="5" Height="32" />
                         <TextBlock Text="Vintage year:" VerticalAlignment="Center" Margin="5" />
-                        <TextBox x:Name="VintageYearTextBox" Width="216" Margin="5" Height="18" />
+                        <TextBox x:Name="VintageYearTextBox" Width="216" Margin="5" Height="32" />
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Left" Margin="0,0,0,10" Grid.ColumnSpan="2">
                         <TextBlock Text="Price:" VerticalAlignment="Center" Margin="5" />
-                        <TextBox x:Name="PriceBox" Width="241" Margin="5" Height="18" />
+                        <TextBox x:Name="PriceBox" Width="241" Margin="5" Height="32" />
                         <TextBlock Text="Alcohol Content:" VerticalAlignment="Center" Margin="5" />
-                        <TextBox x:Name="AlcoholContentBox" Width="196" Margin="5" Height="18" />
+                        <TextBox x:Name="AlcoholContentBox" Width="196" Margin="5" Height="32" />
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Left" Margin="0,35,0,290" Grid.ColumnSpan="2" Grid.RowSpan="2">
@@ -55,14 +52,14 @@
 
                     <!-- CRUD Buttons -->
                     <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Left" Margin="25,24,0,236" Grid.Column="1">
-                        <Button Content="Select wine" Width="100" Margin="10" Click="ReadWineButton_Click" Background="#FFFF5858"/>
-                        <Button Content="Create" Width="100" Margin="10" Click="CreateWineButton_Click" Background="#FF5DFF18"/>
-                        <Button Content="Update" Width="100" Margin="10" Click="UpdateWineButton_Click" Background="#FF4745FF"/>
-                        <Button Content="Delete" Width="100" Margin="10" Click="DeleteWineButton_Click" Background="#FFF1FF5A"/>
+                        <Button Content="Select wine" Width="107" Margin="10" Click="ReadWineButton_Click" Background="#800020" BorderBrush="#4C0013"/>
+                        <Button Content="Create" Width="100" Margin="10" Click="CreateWineButton_Click" Background="#800020" BorderBrush="#4C0013"/>
+                        <Button Content="Update" Width="100" Margin="10" Click="UpdateWineButton_Click" Background="#800020" BorderBrush="#4C0013"/>
+                        <Button Content="Delete" Width="100" Margin="10" Click="DeleteWineButton_Click" Background="#800020" BorderBrush="#4C0013"/>
                     </StackPanel>
 
                     <!-- Data Grid for Staff -->
-                    <DataGrid x:Name="StaffDataGrid" Grid.Row="2" Margin="10,77,10,0" AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False" SelectionMode="Single" Grid.ColumnSpan="2" Grid.RowSpan="2">
+                    <DataGrid Background="#FAF0E6" BorderBrush="Black" x:Name="StaffDataGrid" Grid.Row="2" Margin="10,77,10,0" AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False" SelectionMode="Single" Grid.ColumnSpan="2" Grid.RowSpan="2">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Wine ID" Binding="{Binding WineId}" Width="Auto" />
                             <DataGridTextColumn Header="Wine Name" Binding="{Binding Name}" Width="*" />
@@ -74,6 +71,7 @@
                             <DataGridTextColumn Header="Supplier Name" Binding="{Binding Supplier.Name}" Width="*" />
                         </DataGrid.Columns>
                     </DataGrid>
+
 
                 </Grid>
             </TabItem>
@@ -111,14 +109,14 @@
 
                     <!-- CRUD Buttons -->
                     <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Center" Margin="0,28,0,191">
-                        <Button Content="Select supplier" Width="100" Margin="10" Click="ReadSupplierButton_Click" Background="#FFFF5656"/>
-                        <Button Content="Create" Width="100" Margin="10" Click="CreateSupplierButton_Click" Background="#FF5EFF4F"/>
-                        <Button Content="Update" Width="100" Margin="10" Click="UpdateSupplierButton_Click" Background="#FF4F99FF"/>
-                        <Button Content="Delete" Width="100" Margin="10" Click="DeleteSupplierButton_Click" Background="#FFF6FF43"/>
+                        <Button Content="Select supplier" Width="130" Margin="10" Click="ReadSupplierButton_Click" Background="#800020" BorderBrush="#4C0013"/>
+                        <Button Content="Create" Width="100" Margin="10" Click="CreateSupplierButton_Click" Background="#800020" BorderBrush="#4C0013"/>
+                        <Button Content="Update" Width="100" Margin="10" Click="UpdateSupplierButton_Click" Background="#800020" BorderBrush="#4C0013"/>
+                        <Button Content="Delete" Width="100" Margin="10" Click="DeleteSupplierButton_Click" Background="#800020" BorderBrush="#4C0013"/>
                     </StackPanel>
 
                     <!-- Data Grid for Manager -->
-                    <DataGrid x:Name="ManagerDataGrid" Grid.Row="2" Margin="10,77,10,0" AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False" SelectionMode="Single" Grid.RowSpan="2">
+                    <DataGrid Background="#FAF0E6" x:Name="ManagerDataGrid" Grid.Row="2" Margin="10,77,10,0" AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False" SelectionMode="Single" Grid.RowSpan="2">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Supplier ID" Binding="{Binding SupplierId}" Width="Auto" />
                             <DataGridTextColumn Header="Supplier Name" Binding="{Binding Name}" Width="*" />
@@ -145,27 +143,27 @@
                         <TextBlock Text="Category Name:" VerticalAlignment="Center" Margin="5" />
                         <TextBox x:Name="CategoryNameTextBox" Width="200" Margin="5" Height="28" />
                         <TextBlock Text="Description:" VerticalAlignment="Center" Margin="5" />
-                        <TextBox x:Name="DescriptionTextBox" Width="200" Margin="5" Height="58" TextWrapping="Wrap" />
+                        <TextBox x:Name="DescriptionTextBox" Width="200" Margin="5" Height="28"/>
 
                     </StackPanel>
 
-                    
+
 
                     <!-- CRUD Buttons -->
-                    <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Center" Margin="0,0,0,141">
-                        <Button Content="Select Ctegory" Width="100" Margin="10" Click="ReadCategoryButton_Click" Background="#FFFF5656"/>
-                        <Button Content="Create" Width="100" Margin="10" Click="CreateCategoryButton_Click" Background="#FF5EFF4F" Height="27"/>
-                        <Button Content="Update" Width="100" Margin="10" Click="UpdateCategoryButton_Click" Background="#FF4F99FF"/>
-                        <Button Content="Delete" Width="100" Margin="10" Click="DeleteCategoryButton_Click" Background="#FFF6FF43"/>
+                    <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Center" Margin="0,65,0,76">
+                        <Button Content="Select Ctegory" Width="128" Margin="10" Click="ReadCategoryButton_Click" Background="#800020" BorderBrush="#4C0013"/>
+                        <Button Content="Create" Width="128" Margin="10" Click="CreateCategoryButton_Click" Background="#800020" BorderBrush="#4C0013"/>
+                        <Button Content="Update" Width="128" Margin="10" Click="UpdateCategoryButton_Click" Background="#800020" BorderBrush="#4C0013"/>
+                        <Button Content="Delete" Width="128" Margin="10" Click="DeleteCategoryButton_Click" Background="#800020" BorderBrush="#4C0013"/>
                     </StackPanel>
 
                     <!-- Data Grid for Category -->
-                    <DataGrid x:Name="CategoryDataGrid" Grid.Row="2" Margin="10,71,10,0" AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False" SelectionMode="Single" Grid.RowSpan="2">
+                    <DataGrid Background="#FAF0E6" x:Name="CategoryDataGrid" Grid.Row="2" Margin="10,131,10,0" AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False" SelectionMode="Single" Grid.RowSpan="2">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Category ID" Binding="{Binding CategoryId}" Width="Auto" />
                             <DataGridTextColumn Header="Category Name" Binding="{Binding CategoryName}" Width="*" />
                             <DataGridTextColumn Header="Description person" Binding="{Binding Description}" Width="*" />
-                            
+
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>
@@ -173,7 +171,7 @@
 
 
         </TabControl>
-        <Button Content="Back to Home Page" Click="BacktoManagerHomePage_click" Margin="664,34,10,416" Background="#FFF86CFF"/>
+        <Button Content="Back to Home Page" Click="BacktoManagerHomePage_click" HorizontalAlignment="Left" Height="52" Margin="617,81,0,0" VerticalAlignment="Top" Width="163" Background="#FFF86CFF"/>
 
     </Grid>
 </Window>

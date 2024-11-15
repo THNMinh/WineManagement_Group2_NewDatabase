@@ -3,59 +3,24 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:WineWarehouseManagement"
+        xmlns:local="clr-namespace:WineWarehouseManagement" xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="Login" Height="340" Width="428" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
-    <Window.Background>
-        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-            <GradientStop Color="#FF282063"/>
-            <GradientStop Color="#FF9480E8" Offset="1"/>
-        </LinearGradientBrush>
-    </Window.Background>
-    <Grid Margin="0,0,-24,42">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
-
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="83*" />
-            <ColumnDefinition Width="19*"/>
-            <ColumnDefinition Width="202*" />
-            <ColumnDefinition Width="101*" />
-        </Grid.ColumnDefinitions>
-
+        Icon="logo.ico"
+        Title="Login" Height="340" Width="428" ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
+        Background="#FAF0E6">
+    <Grid>
         <!-- Label for Username -->
-        <Label Grid.Column="0" Content="Login here" FontSize="20" FontWeight="Bold" 
-               Foreground="AntiqueWhite" HorizontalAlignment="Left" VerticalAlignment="Top" 
-               Margin="8,21,0,0" Grid.ColumnSpan="3" Height="42" Width="150" />
-
-        <Label Grid.Row="1" Grid.Column="0" Content="Email:" 
-               Foreground="#FFBCD9F1" HorizontalAlignment="Right" VerticalAlignment="Top" 
-               Margin="0,23,2,0" Height="26" Width="66" FontWeight="SemiBold"/>
-        <TextBox x:Name="EmailTextBox" Grid.Row="1" Grid.Column="2" 
-                 Background="#ECF0F1" BorderBrush="#2980B9" BorderThickness="1" 
-                 Width="224" Height="25" HorizontalAlignment="Center" VerticalAlignment="Center" />
+        <Label Content="WineWarehouseManagement " FontSize="20" FontWeight="Bold" 
+               Foreground="#333333" HorizontalAlignment="Left" VerticalAlignment="Top" 
+               Margin="72,20,0,0" Height="42" Width="300" />
+        <materialDesign:PackIcon Kind="Email" Width="27" Height="25" Foreground="#333333" Margin="81,90,0,0" />
+        <TextBox x:Name="EmailTextBox" 
+                 Width="224" Height="33" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="124,82,0,0" />
 
         <!-- Label for Password -->
-        <Label Grid.Row="2" Grid.Column="0" Content="Password:" 
-               Foreground="#FFBCD9F1" HorizontalAlignment="Right" VerticalAlignment="Top" 
-               Margin="0,23,2,0" Height="25" Width="62" FontWeight="SemiBold"/>
-        <PasswordBox x:Name="PasswordBox" Grid.Row="2" Grid.Column="2" 
-                     Background="#ECF0F1" BorderBrush="#2980B9" BorderThickness="1" 
-                     Width="222" Height="25" HorizontalAlignment="Center" VerticalAlignment="Center" />
-
-        <!-- Buttons -->
-        <StackPanel Grid.Row="3" Grid.Column="2" Orientation="Horizontal" 
-                    HorizontalAlignment="Center" VerticalAlignment="Top" 
-                    RenderTransformOrigin="0.493,0.477" Margin="0,7,0,0" Height="30" Width="170">
-            <Button Content="Login" Width="75" Margin="5" Foreground="White" 
-                    Background="#27AE60" BorderBrush="#27AE60" Click="LoginButton_Click" />
-            <Button Content="Cancel" Width="75" Margin="5" Foreground="White" 
-                    Background="#E74C3C" BorderBrush="#E74C3C" Click="CancelButton_Click" />
-        </StackPanel>
+        <materialDesign:PackIcon Kind="Lock" Width="27" Height="25" Foreground="#333333" Margin="81,133,0,0" />
+        <PasswordBox x:Name="PasswordBox"          
+                     Width="222" Height="26" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="126,132,0,0"/>
+        <Button Background="#800020" BorderBrush="#4C0013" Content="Login" HorizontalAlignment="Center" Height="49" Margin="0,190,0,0" VerticalAlignment="Top" Width="112" Click="LoginButton_Click"/>
     </Grid>
 </Window>

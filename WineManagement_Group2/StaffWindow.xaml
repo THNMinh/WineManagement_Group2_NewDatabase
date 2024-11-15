@@ -4,24 +4,19 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="Staff - Request Management" Height="544" Width="850" WindowStartupLocation="CenterScreen">
+        Title="Staff - Request Management" Height="544" Width="850" WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize"
+        Background="#FAF0E6">
     <Grid Margin="0,0,3,5">
-        <Grid.Background>
-            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                <GradientStop Color="#FFFF9100"/>
-                <GradientStop Color="#FFBDFF00" Offset="1"/>
-            </LinearGradientBrush>
-        </Grid.Background>
-
         <!-- Title -->
-        <Label Content="Wine Management" FontSize="24" FontWeight="Bold" HorizontalAlignment="Left" Grid.ColumnSpan="2" Margin="311,0,0,404" Grid.RowSpan="2" Width="225" />
+        <Label Content="Wine Management" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,10,0,394" Width="225" />
 
         <!-- Form Inputs -->
 
         <!-- DataGrid for Wine List -->
         <TabControl Margin="10,106,184,10">
             <TabItem x:Name="WineTab" Header="Wines">
-                <DataGrid x:Name="WineDataGrid" Grid.Row="1" Grid.Column="1" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True">
+                <DataGrid Background="#FAF0E6" BorderBrush="Black" x:Name="WineDataGrid" Grid.Row="1" Grid.Column="1" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Wine Name" Binding="{Binding Name}" Width="*" />
                         <DataGridTextColumn Header="Vintage Year" Binding="{Binding VintageYear}" Width="*" />
@@ -32,7 +27,7 @@
                 </DataGrid>
             </TabItem>
             <TabItem x:Name="RequestTab" Header="Requests">
-                <DataGrid x:Name="RequestsDataGrid" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True">
+                <DataGrid Background="#FAF0E6" x:Name="RequestsDataGrid" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Request ID" Binding="{Binding RequestId}" Width="*" />
                         <DataGridTextColumn Header="Staff ID" Binding="{Binding AccountId}" Width="*" />
@@ -43,10 +38,10 @@
                 </DataGrid>
             </TabItem>
         </TabControl>
-        <Button Content="Create Request" HorizontalAlignment="Left" Margin="668,208,0,0" VerticalAlignment="Top" Height="62" Width="160" Click="CreateRequest"/>
-        <Button Content="Logout" HorizontalAlignment="Left" Margin="668,358,0,0" VerticalAlignment="Top" Height="62" Width="160" Click="Logout_Click"/>
+        <Button Content="Create Request" Background="#800020" BorderBrush="#4C0013" HorizontalAlignment="Left" Margin="668,208,0,0" VerticalAlignment="Top" Height="62" Width="160" Click="CreateRequest"/>
+        <Button Content="Logout" Background="#CCCCCC" Foreground="#333333" BorderBrush="DimGray" HorizontalAlignment="Left" Margin="668,358,0,0" VerticalAlignment="Top" Height="62" Width="160" Click="Logout_Click"/>
         <TextBox x:Name="txtSearch" HorizontalAlignment="Left" Height="41" Margin="176,60,0,0" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Width="487"/>
-        <Button Content="Search" HorizontalAlignment="Left" Height="45" Margin="696,60,0,0" VerticalAlignment="Top" Width="95" Click="btn_Search"/>
+        <Button Content="Search" Background="#800020" BorderBrush="#4C0013" HorizontalAlignment="Left" Height="45" Margin="696,60,0,0" VerticalAlignment="Top" Width="95" Click="btn_Search"/>
         <Label Content="Search By Wine" FontSize="16" HorizontalAlignment="Left" Height="32" Margin="49,65,0,0" VerticalAlignment="Top" Width="122"/>
     </Grid>
 </Window>
