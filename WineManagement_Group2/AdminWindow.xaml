@@ -133,7 +133,7 @@
 
                     </StackPanel>
 
-                    <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Left" Grid.ColumnSpan="2" Margin="0,0,0,680" Grid.RowSpan="2">
+                    <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Left" Grid.ColumnSpan="2" Margin="0,0,0,645" Grid.RowSpan="2">
                         <TextBlock Text="Contact Person:" VerticalAlignment="Center" Margin="5" />
                         <TextBox x:Name="ContactPersonTextBox" Width="200" Margin="5" />
                         <TextBlock Text="PhoneNumber:" VerticalAlignment="Center" Margin="5" />
@@ -141,14 +141,14 @@
                     </StackPanel>
 
                     <!-- CRUD Buttons -->
-                    <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Left" Margin="212,11,0,589" Width="486" Grid.ColumnSpan="2">
+                    <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Left" Margin="213,23,0,577" Width="486" Grid.ColumnSpan="2">
                         <Button Content="Create" Width="100" Margin="10" Click="CreateWareHouseButton_Click"/>
                         <Button Content="Update" Width="100" Margin="10" Click="UpdateWareHouseButton_Click"/>
                         <Button Content="Delete" Width="100" Margin="10" Click="DeleteWareHouseButton_Click"/>
                     </StackPanel>
 
                     <!-- Data Grid for WareHouse -->
-                    <DataGrid x:Name="WareHouseDataGrid" Grid.Row="2" Margin="10,152,10,10" AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False" SelectionMode="Single" SelectionChanged="dgData_SelectionChangedForWareHouse" Grid.ColumnSpan="2">
+                    <DataGrid x:Name="WareHouseDataGrid" Grid.Row="2" Margin="10,152,10,10" AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False" SelectionMode="Single" SelectionChanged="dgData_SelectionChangedForWareHouse" Grid.ColumnSpan="2" >
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Address" Binding="{Binding Address}" Width="Auto" />
                             <DataGridTextColumn Header="ContactPerson Name" Binding="{Binding ContactPerson}" Width="*" />
@@ -156,9 +156,9 @@
                             <DataGridTextColumn Header="Location" Binding="{Binding Location}" Width="*" />
                         </DataGrid.Columns>
                     </DataGrid>
-                    <TextBox x:Name="txtSearchWareHouse" HorizontalAlignment="Left" Height="41" Margin="166,94,0,0" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Width="469" Grid.Row="2" Grid.ColumnSpan="2"/>
-                    <Button Content="Search" HorizontalAlignment="Left" Height="45" Margin="403,92,0,0" VerticalAlignment="Top" Width="95" Click="btn_Search" Grid.Row="2" Grid.Column="1"/>
-                    <Label Content="Search By Address" FontSize="16" HorizontalAlignment="Left" Height="32" Margin="7,99,0,0" VerticalAlignment="Top" Width="154" Grid.Row="2"/>
+                    <TextBox x:Name="txtSearchWareHouse" HorizontalAlignment="Left" Height="41" Margin="161,99,0,0" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Width="469" Grid.Row="2" Grid.ColumnSpan="2"/>
+                    <Button Content="Search" HorizontalAlignment="Left" Height="34" Margin="387,108,0,0" VerticalAlignment="Top" Width="95" Click="btn_Search" Grid.Row="2" Grid.Column="1"/>
+                    <Label Content="Search By Address" FontSize="16" HorizontalAlignment="Left" Height="32" Margin="7,108,0,0" VerticalAlignment="Top" Width="154" Grid.Row="2"/>
                 </Grid>
             </TabItem>
         </TabControl>

@@ -364,7 +364,16 @@ namespace WineWarehouseManagement
             }
         }
 
-
+        private void dgData_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (RequestsDataGrid.SelectedItem is RequestData selectedRequest)
+            {
+                WineNameComboBox.Text = selectedRequest.WineName.ToString();
+                QuantityTextBox.Text = selectedRequest.Quantity.ToString();
+                ExpportComboBox.Text = selectedRequest.Export.ToString();
+                
+            }
+        }
 
 
 

@@ -481,7 +481,7 @@ namespace WineWarehouseManagement
 
         private void dgData_SelectionChangedForWareHouse(object sender, SelectionChangedEventArgs e)
         {
-            if (ManagerDataGrid.SelectedItem is WareHouse selectedWareHouse)
+            if (WareHouseDataGrid.SelectedItem is WareHouse selectedWareHouse)
             {
                 WareHouseAddressTextBox.Text = selectedWareHouse.Address.ToString();
                 LocationTextBox.Text = selectedWareHouse.Location.ToString();
