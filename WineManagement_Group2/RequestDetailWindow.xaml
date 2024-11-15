@@ -27,7 +27,7 @@
         <Label Content="Wine Management" FontSize="24" FontWeight="Bold" HorizontalAlignment="Left" Grid.ColumnSpan="2" Margin="311,0,0,404" Grid.RowSpan="2" Width="225" />
 
         <!-- Form Inputs -->
-        <StackPanel Grid.Row="1" Grid.Column="0" Margin="18,124,21,0" VerticalAlignment="Top" Height="243">
+        <StackPanel Grid.Row="1" Grid.Column="0" Margin="218,60,218,0" VerticalAlignment="Top" Height="243" Grid.ColumnSpan="2">
             <!-- Wine Name -->
             <StackPanel Orientation="Horizontal" Margin="5">
                 <Label Content="Wine Name:" Width="100" VerticalAlignment="Center"/>
@@ -39,6 +39,15 @@
                 <Label Content="Quantity:" Width="100" VerticalAlignment="Center"/>
                 <TextBox x:Name="QuantityTextBox" Width="200"/>
             </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Margin="5">
+                <Label Content="Export:" Width="100" VerticalAlignment="Center"/>
+                <ComboBox x:Name="ExpportComboBox" Width="200" SelectedValuePath="Tag">
+                    <ComboBoxItem Content="Import" Tag="true" />
+                    <ComboBoxItem Content="Export" Tag="false" />
+                </ComboBox>
+            </StackPanel>
+
 
             <!-- Origin -->
 
@@ -53,15 +62,16 @@
         </StackPanel>
 
         <!-- DataGrid for Wine List -->
-        <TabControl Margin="10,96,0,31" Grid.Row="1" Grid.Column="1">
+        <TabControl Margin="0,262,0,0" Grid.Row="1" Grid.ColumnSpan="2">
             <TabItem Header="Wines">
                 <DataGrid x:Name="WinesDataGrid" Grid.Row="1" Grid.Column="1" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True" SelectionMode="Single">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Wine Name" Binding="{Binding Name}" Width="*" />
-                        <DataGridTextColumn Header="Vintage Year" Binding="{Binding VintageYear}" Width="Auto" />
-                        <DataGridTextColumn Header="Alcohol Content" Binding="{Binding AlcoholContent}" Width="Auto" />
-                        <DataGridTextColumn Header="Price" Binding="{Binding Price}" Width="Auto" />
-                        <DataGridTextColumn Header="Category" Binding="{Binding CategoryName}" Width="Auto" />
+                        <DataGridTextColumn Header="Vintage Year" Binding="{Binding VintageYear}" Width="*" />
+                        <DataGridTextColumn Header="Alcohol Content" Binding="{Binding AlcoholContent}" Width="*" />
+                        <DataGridTextColumn Header="Price" Binding="{Binding Price}" Width="*" />
+                        <DataGridTextColumn Header="Category" Binding="{Binding CategoryName}" Width="*" />
+                        <DataGridTextColumn Header="Quantity in Ware house" Binding="{Binding Quantity}" Width="*" />
                     </DataGrid.Columns>
                 </DataGrid>
             </TabItem>
@@ -73,11 +83,12 @@
                         <DataGridTextColumn Header="Wine" Binding="{Binding WineName}" Width="*" />
                         <DataGridTextColumn Header="Quantity" Binding="{Binding Quantity}" Width="*" />
                         <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="*" />
+                        <DataGridTextColumn Header="Export" Binding="{Binding Export}" Width="*" />
                     </DataGrid.Columns>
                 </DataGrid>
             </TabItem>
         </TabControl>
-        <Button Content="Back" Margin="157,405,160,65" Grid.Row="1" Click="Back_Click"/>
+        <Button Content="Back" Margin="10,10,326,463" Grid.Row="1" Click="Back_Click"/>
         <Button Grid.Column="1" Content="Logout" HorizontalAlignment="Left" Margin="277,10,0,0" Grid.Row="1" VerticalAlignment="Top" Height="50" Width="110" Click="Logout_Click"/>
 
     </Grid>

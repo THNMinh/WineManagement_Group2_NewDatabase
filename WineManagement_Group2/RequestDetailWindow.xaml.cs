@@ -44,11 +44,40 @@ namespace WineWarehouseManagement
         }
         public void LoadComboList()
         {
-            var list = _wineRepository.GetAllWines();
+            // Get all wines that have an entry in WarehouseWine
+            var list = _context.WarehouseWines
+                .Select(ww => ww.Wine)
+                .Distinct() // Ensure unique wines are listed
+                .ToList();
+
+            // Bind the filtered list to the WineNameComboBox
             WineNameComboBox.ItemsSource = list;
             WineNameComboBox.DisplayMemberPath = "Name";
             WineNameComboBox.SelectedValuePath = "WineId";
         }
+
+
+        private void LoadRequest()
+        {
+            try
+            {
+                var requestData = GetRequestData();
+                if (requestData != null && requestData.Count > 0)
+                {
+                    RequestsDataGrid.ItemsSource = requestData;
+                }
+                else
+                {
+                    MessageBox.Show("No data found.");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error loading request data: " + ex.Message);
+            }
+        }
+
+
 
         public class RequestData()
         {
@@ -58,17 +87,7 @@ namespace WineWarehouseManagement
             public string WineName { get; set; }
             public int Quantity { get; set; }
             public string Status { get; set; }
-        }
-        private void LoadRequest()
-        {
-            try
-            {
-                RequestsDataGrid.ItemsSource = GetRequestData();  // Bind data to RequestsDataGrid
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error loading request data: " + ex.Message);
-            }
+            public string Export { get; set; }
         }
 
         private List<RequestData> GetRequestData()
@@ -83,7 +102,12 @@ namespace WineWarehouseManagement
                     AccountId = rd.Request != null ? rd.Request.AccountId ?? 0 : 0,
                     WineName = rd.Wine != null ? rd.Wine.Name ?? "Unknown" : "Unknown",
                     Quantity = rd.Quantity,
-                    Status = rd.Request != null ? rd.Request.Status ?? "Unknown" : "Unknown"
+                    Status = rd.Request != null ? rd.Request.Status ?? "Unknown" : "Unknown",
+                    Export = rd.Request != null
+                        ? (rd.Request.Export.HasValue
+                            ? (rd.Request.Export.Value == true ? "Import" : "Export")
+                            : "Not Exported")
+                        : "Not Exported"
                 })
                 .ToList();
 
@@ -95,17 +119,20 @@ namespace WineWarehouseManagement
         {
             try
             {
-                // Lấy dữ liệu rượu vang từ cơ sở dữ liệu và ánh xạ với các thuộc tính trong DataGrid
-                var wineData = _context.Wines.Select(wine => new
-                {
-                    wine.Name,
-                    wine.VintageYear,
-                    wine.AlcoholContent,
-                    wine.Price,
-                    CategoryName = wine.Category != null ? wine.Category.CategoryName : "N/A"
-                }).ToList();
+                // Get data of wines that are present in WarehouseWine, including their quantities in each warehouse
+                var wineData = _context.WarehouseWines // Optional: filter to show only wines with positive quantities
+                    .Select(ww => new
+                    {
+                        ww.Wine.Name,
+                        ww.Wine.VintageYear,
+                        ww.Wine.AlcoholContent,
+                        ww.Wine.Price,
+                        CategoryName = ww.Wine.Category != null ? ww.Wine.Category.CategoryName : "N/A",
+                        Quantity = ww.Quantity
+                    })
+                    .ToList();
 
-                // Gán dữ liệu vào WineDataGrid
+                // Bind data to WinesDataGrid
                 WinesDataGrid.ItemsSource = wineData;
             }
             catch (Exception ex)
@@ -113,6 +140,7 @@ namespace WineWarehouseManagement
                 MessageBox.Show("Error loading wine data: " + ex.Message);
             }
         }
+
 
 
         private void Back_Click(object sender, RoutedEventArgs e)
@@ -126,15 +154,26 @@ namespace WineWarehouseManagement
             if (WineNameComboBox.SelectedValue != null && int.TryParse(QuantityTextBox.Text, out int quantity))
             {
                 int wineId = (int)WineNameComboBox.SelectedValue;
+                bool isExport = ExpportComboBox.SelectedValue.ToString() == "true";
 
-                // First, create a new request and capture the RequestId
-                int requestId = CreateRequest(); // Update CreateRequest to return the new RequestId
+                // If export is false (Import), check quantity availability
+                if (!isExport)
+                {
+                    var warehouseWine = _context.WarehouseWines.FirstOrDefault(ww => ww.WineId == wineId);
+                    if (warehouseWine != null && (warehouseWine.Quantity - quantity < 0))
+                    {
+                        MessageBox.Show("Insufficient stock for the requested quantity.");
+                        return;
+                    }
+                }
 
-                if (requestId > 0) // Ensure a valid RequestId was returned
+                // Create a new request and add request details
+                int requestId = CreateRequest(isExport);
+                if (requestId > 0)
                 {
                     var requestDetail = new RequestDetail
                     {
-                        RequestId = requestId, // Use the newly created RequestId
+                        RequestId = requestId,
                         WineId = wineId,
                         Quantity = quantity
                     };
@@ -145,6 +184,17 @@ namespace WineWarehouseManagement
                         MessageBox.Show("Request detail created successfully!");
                         LoadRequest(); // Refresh the request data grid
                         ClearRequestDetailFields();
+
+                        //// If export is false, reduce stock quantity
+                        //if (!isExport)
+                        //{
+                        //    var warehouseWine = _context.WarehouseWines.FirstOrDefault(ww => ww.WineId == wineId);
+                        //    if (warehouseWine != null)
+                        //    {
+                        //        warehouseWine.Quantity -= quantity;
+                        //        _context.SaveChanges();
+                        //    }
+                        //}
                     }
                     catch (Exception ex)
                     {
@@ -162,28 +212,25 @@ namespace WineWarehouseManagement
             }
         }
 
-        private int CreateRequest()
+        private int CreateRequest(bool isExport)
         {
             try
             {
-                // Create a new request
                 var request = new BusinessObjects.Entities.Request
                 {
-                    AccountId = accountId, // Set AccountId
-                    Status = "Pending" // Default status
+                    AccountId = accountId,
+                    Status = "Pending",
+                    Export = isExport // Set export status based on selection
                 };
 
-                // Add the request to the database and save changes
                 _context.Requests.Add(request);
                 _context.SaveChanges();
-
-                // Return the newly created RequestId
-                return request.RequestId; // Ensure this property exists in your Request entity
+                return request.RequestId;
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Error creating request: " + ex.Message);
-                return 0; // Return 0 if creation fails
+                return 0;
             }
         }
 
@@ -191,60 +238,97 @@ namespace WineWarehouseManagement
         {
             if (RequestsDataGrid.SelectedItem is RequestData selectedRequest)
             {
-                if (WineNameComboBox.SelectedValue != null && !string.IsNullOrWhiteSpace(QuantityTextBox.Text))
+                if (WineNameComboBox.SelectedValue != null && int.TryParse(QuantityTextBox.Text, out int quantity))
                 {
-                    int requestDetailId = selectedRequest.RequestDetailId; // Correct ID for RequestDetail
-                    if (!int.TryParse(WineNameComboBox.SelectedValue.ToString(), out int wineId))
+                    if (selectedRequest.Status != "Pending")
                     {
-                        MessageBox.Show("Invalid wine selection.");
+                        MessageBox.Show("This request cannot update.");
                         return;
                     }
 
-                    if (!int.TryParse(QuantityTextBox.Text, out int quantity) || quantity <= 0)
-                    {
-                        MessageBox.Show("Quantity must be a positive number.");
-                        return;
-                    }
+                    int requestDetailId = selectedRequest.RequestDetailId;
+                    int requestId = selectedRequest.RequestId;
+                    int wineId = (int)WineNameComboBox.SelectedValue;
+                    bool isExport = ExpportComboBox.SelectedValue.ToString() == "true";
 
-                    var requestDetail = _requestDetailRepository.GetRequestDetailById(requestDetailId);
-                    if (requestDetail != null)
+                    // Lấy Request và RequestDetail từ cơ sở dữ liệu
+                    var request = _context.Requests.FirstOrDefault(r => r.RequestId == requestId);
+                    var requestDetail = _context.RequestDetails.FirstOrDefault(rd => rd.RequestDetailId == requestDetailId);
+
+                    if (request != null && requestDetail != null)
                     {
+
+
+                        // Kiểm tra kho nếu là nhập (Import)
+                        if (!isExport)
+                        {
+                            var warehouseWine = _context.WarehouseWines.FirstOrDefault(ww => ww.WineId == wineId);
+                            if (warehouseWine != null && (warehouseWine.Quantity - quantity < 0))
+                            {
+                                MessageBox.Show("Insufficient stock for the requested quantity.");
+                                return;
+                            }
+                        }
+                        // Cập nhật thông tin Request
+                        request.Export = isExport;
+                        // Cập nhật thông tin RequestDetail
                         requestDetail.WineId = wineId;
                         requestDetail.Quantity = quantity;
 
                         try
                         {
-                            _requestDetailRepository.UpdateRequestDetail(requestDetail);
-                            MessageBox.Show("Request detail updated successfully.");
-                            LoadRequest(); // Refresh the request data grid
+                            // Lưu thay đổi trong database
+                            _context.SaveChanges();
+                            MessageBox.Show("Request detail created successfully!");
+                            LoadRequest(); // Tải lại danh sách yêu cầu
                             ClearRequestDetailFields();
+
+                            // Nếu là nhập (Import), giảm số lượng trong kho
+                            //if (!isExport)
+                            //{
+                            //    var warehouseWine = _context.WarehouseWines.FirstOrDefault(ww => ww.WineId == wineId);
+                            //    if (warehouseWine != null)
+                            //    {
+                            //        warehouseWine.Quantity -= quantity;
+                            //        _context.SaveChanges();
+                            //    }
+                            //}
                         }
                         catch (Exception ex)
                         {
-                            MessageBox.Show("Error updating request detail: " + ex.Message);
+                            MessageBox.Show("Error updating Request or RequestDetail: " + ex.Message);
                         }
                     }
                     else
                     {
-                        MessageBox.Show("Request detail not found.");
+                        MessageBox.Show("Request or RequestDetail not found.");
                     }
                 }
                 else
                 {
-                    MessageBox.Show("Wine Name and Quantity must not be null!");
+                    MessageBox.Show("Please select product and enter valid quantity.");
                 }
             }
             else
             {
-                MessageBox.Show("Please select a request detail to update.");
+                MessageBox.Show("Please select a Request to update.");
             }
         }
+
+
+
 
         private void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
             // Ensure a request detail is selected
             if (RequestsDataGrid.SelectedItem is RequestData selectedRequest)
             {
+                if (selectedRequest.Status != "Pending")
+                {
+                    MessageBox.Show("This request cannot delete.");
+                    return;
+                }
+
                 int requestDetailId = selectedRequest.RequestDetailId; // Get the ID of the selected request detail
 
                 // Confirm deletion with the user
@@ -283,7 +367,7 @@ namespace WineWarehouseManagement
 
 
 
-        
+
         private void Logout_Click(object sender, RoutedEventArgs e)
         {
             LoginWindow login = new LoginWindow();
@@ -295,6 +379,7 @@ namespace WineWarehouseManagement
         {
             QuantityTextBox.Clear();
             WineNameComboBox.SelectedIndex = -1;
+            ExpportComboBox.SelectedIndex = -1;
         }
     }
 }
