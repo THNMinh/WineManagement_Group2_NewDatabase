@@ -22,7 +22,7 @@ namespace DataAccessLayer
         {
             using (var db = new WineManagement2Context())
             {
-                return db.Categories.ToList();
+                return db.Categories.Where(w => w.Status == null).ToList();
             }
         }
 
@@ -45,6 +45,20 @@ namespace DataAccessLayer
         }
 
         public void DeleteCategory(int id)
+        {
+            using (var db = new WineManagement2Context())
+            {
+                var category = db.Categories.Find(id);
+                if (category != null)
+                {
+                    category.Status = "false";
+                    db.Categories.Update(category);
+                    db.SaveChanges();
+                }
+            }
+        }
+
+        public void DeleteCategory2(int id)
         {
             using (var db = new WineManagement2Context())
             {

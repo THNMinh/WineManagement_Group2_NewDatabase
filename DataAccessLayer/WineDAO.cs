@@ -21,9 +21,16 @@ namespace DataAccessLayer
 
         public IEnumerable<Wine> GetAllWines()
         {
+            //using (var db = new WineManagement2Context())
+            //{
+            //    return db.Wines.Include("Supplier").ToList();
+            //}
             using (var db = new WineManagement2Context())
             {
-                return db.Wines.Include("Supplier").ToList();
+                return db.Wines
+                    .Include("Supplier")
+                    .Where(w => w.Status == null) // Filter by status
+                    .ToList();
             }
         }
 
@@ -46,6 +53,22 @@ namespace DataAccessLayer
         }
 
         public void DeleteWine(int id)
+        {
+            using (var db = new WineManagement2Context())
+            {
+                var wine = db.Wines.Find(id);
+                if (wine != null)
+                {
+                    wine.Status = "false";
+                    db.Wines.Update(wine);
+                    db.SaveChanges();
+                }
+            }
+        }
+
+
+
+        public void DeleteWine2(int id)
         {
             using (var db = new WineManagement2Context())
             {

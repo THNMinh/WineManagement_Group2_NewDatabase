@@ -22,7 +22,7 @@ namespace DataAccessLayer
         {
             using (var db = new WineManagement2Context())
             {
-                return db.WareHouses.Where(w => w.Status == "True").ToList();
+                return db.WareHouses.Where(w => w.Status == null).ToList();
             }
         }
 
@@ -45,6 +45,20 @@ namespace DataAccessLayer
         }
 
         public void DeleteWareHouse(int id)
+        {
+            using (var db = new WineManagement2Context())
+            {
+                var WareHouse = db.WareHouses.Find(id);
+                if (WareHouse != null)
+                {
+                    WareHouse.Status = "false";
+                    db.WareHouses.Update(WareHouse);
+                    db.SaveChanges();
+                }
+            }
+        }
+
+        public void DeleteWareHouse2(int id)
         {
             using (var db = new WineManagement2Context())
             {
