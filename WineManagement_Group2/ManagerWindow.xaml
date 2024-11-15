@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WineWarehouseManagement"
         mc:Ignorable="d"
+        Icon="logo.ico"
         Title="Staff Management for Manager" 
         Height="450" 
         Width="600" WindowStartupLocation="CenterScreen"
@@ -60,17 +61,16 @@
         </StackPanel>
 
         <!-- DataGrid for displaying staff -->
-        <DataGrid Background="#FAF0E6" BorderBrush="Black" x:Name="StaffDataGrid" Grid.Row="5" Grid.ColumnSpan="2" AutoGenerateColumns="False" CanUserAddRows="False" Margin="5" IsReadOnly="True" SelectionChanged="dgData_SelectionChanged">
+        <DataGrid Background="#FAF0E6" x:Name="StaffDataGrid" Grid.Row="4" Grid.ColumnSpan="2" AutoGenerateColumns="False" CanUserAddRows="False" Margin="5" IsReadOnly="True" SelectionChanged="dgData_SelectionChanged">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Staff ID" Binding="{Binding AccountId}" Width="Auto" />
+                <DataGridTextColumn Header="Staff ID" Binding="{Binding AccountId}" Width="*" />
                 <DataGridTextColumn Header="Staff Name" Binding="{Binding Username}" Width="*" />
-                <DataGridTextColumn Header="Password" Binding="{Binding PasswordHash}" Width="*" />
                 <DataGridTextColumn Header="Staff Email" Binding="{Binding Email}" Width="*" />
                 <DataGridTextColumn Header="Role" Binding="{Binding Role}" Width="*" />
             </DataGrid.Columns>
         </DataGrid>
 
         <!-- Save Changes Button -->
-        <Button Grid.Row="6" Grid.ColumnSpan="2" Content="Back to Manager Page" Width="181" Margin="0,10,0,10" HorizontalAlignment="Center" Click="BacktoManagerHomePage_click" Background="#FFF86CFF"/>
+        <Button Grid.Row="6" Grid.ColumnSpan="2" Content="Back to Manager Page" Width="181" Margin="0,10,0,10" HorizontalAlignment="Center" Click="BacktoManagerHomePage_click" Background="#FF5A9661"/>
     </Grid>
 </Window>

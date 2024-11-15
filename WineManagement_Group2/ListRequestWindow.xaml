@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WineWarehouseManagement"
         mc:Ignorable="d"
+        Icon="logo.ico"
         Title="ListRequestWindow" Height="450" Width="800"
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize"
@@ -28,7 +29,7 @@
             <!-- Category (ComboBox) -->
 
             <!-- Buttons -->
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10" Width="751">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10" Width="700">
                 <Button Content="Reject" Click="RejectButton_Click" Width="89" Margin="10"  Background="#A0522D" BorderBrush="#4C0013"/>
                 <Button Content="Accept" Width="89" Margin="10" Click="UpdateButton_Click" Background="#6B8E23" BorderBrush="#4C0013"/>
 
@@ -38,7 +39,7 @@
 
         <TabControl Margin="0,136,0,0">
             <TabItem x:Name="RequestTab" Header="Requests">
-                <DataGrid Background="#FAF0E6" BorderBrush="Black" x:Name="RequestsDataGrid" Grid.Row="1" Grid.Column="1" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True" SelectionChanged="dgData_SelectionChanged">
+                <DataGrid Background="#FAF0E6" x:Name="RequestsDataGrid" Grid.Row="1" Grid.Column="1" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True" SelectionChanged="dgData_SelectionChanged">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Request ID" Binding="{Binding RequestId}" Width="*" />
                         <DataGridTextColumn Header="Staff ID" Binding="{Binding AccountId}" Width="*" />
@@ -69,7 +70,7 @@
 
         <Label Content="Search By Wine" FontSize="16" HorizontalAlignment="Center" Height="32" Margin="0,91,0,0" VerticalAlignment="Top" Width="122"/>
         <Button Content="Search" Click="btn_Search" Background="#800020" BorderBrush="#4C0013" HorizontalAlignment="Left" Height="41" Margin="694,90,0,0" VerticalAlignment="Top" Width="85"/>
-        <Button Content="Back to manager home page" Click="BacktoManagerHomePage_click" Background="#FFE99EFF" BorderBrush="#4C0013" HorizontalAlignment="Left" Height="46" Margin="560,10,0,0" VerticalAlignment="Top" Width="219"/>
+        <Button Content="Back to manager home page" Click="BacktoManagerHomePage_click" Background="#FF5A9661" BorderBrush="#4C0013" HorizontalAlignment="Left" Height="46" Margin="560,10,0,0" VerticalAlignment="Top" Width="219"/>
 
     </Grid>
 </Window>

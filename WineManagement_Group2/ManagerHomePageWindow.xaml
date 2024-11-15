@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WineWarehouseManagement"
         mc:Ignorable="d"
+        Icon="logo.ico"
         Title="ManagerHomePageWindow" Height="450" Width="800"
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize"
@@ -12,28 +13,20 @@
     <Grid>
         <StackPanel Margin="0,50,0,10">
             <StackPanel Margin="50" Height="100">
-                <TextBlock FontSize="75" HorizontalAlignment="Center" Foreground="#333333">
+                <TextBlock FontSize="75" HorizontalAlignment="Center" Foreground="#333333" FontFamily="Algerian">
                 Manager Page
                 </TextBlock>
             </StackPanel>
             <StackPanel Height="117" Width="568">
-                <StackPanel Height="121" Width="589" Orientation="Horizontal">
+                <StackPanel Height="121" Width="594" Orientation="Horizontal">
                     <Button Height="80" Width="118" Margin="10 0" Click="btnRequstLisr" Background="#FF822C42" BorderBrush="#4C0013" Content="List Request"/>
-                    <Button Height="80" Width="168" Click="btnWine_Supplier" Background="#FFA08700" BorderBrush="#4C0013" Content="Wine, Category and &#xA;Supplier Manage"/>
-                    <Button Height="80" Width="113" Margin="10 0" Click="btnStaff" Background="#8B4513" BorderBrush="#4C0013" Content="Staff Manage"/>
-                    <Button Height="80" Width="136" Click="btnAddWineWarehouse" Background="#556B2F" BorderBrush="#4C0013" Content="Add wine  &#xA; to Warehouse" RenderTransformOrigin="0.5,0.5">
-                        <Button.RenderTransform>
-                            <TransformGroup>
-                                <ScaleTransform/>
-                                <SkewTransform AngleY="0.766"/>
-                                <RotateTransform/>
-                                <TranslateTransform Y="0.722"/>
-                            </TransformGroup>
-                        </Button.RenderTransform>
+                    <Button Height="80" Width="159" Click="btnWine_Supplier" Background="#FFA08700" BorderBrush="#4C0013" Content="Wine, Category and &#xA;Supplier Manage"/>
+                    <Button Height="80" Width="119" Margin="10 0" Click="btnStaff" Background="#8B4513" BorderBrush="#4C0013" Content="Staff Manage"/>
+                    <Button Height="80" Width="126" Click="btnAddWineWarehouse" Background="#556B2F" BorderBrush="#4C0013" Content="Add wine  &#xA; to Warehouse" RenderTransformOrigin="0.5,0.5">
                     </Button>
                 </StackPanel>
             </StackPanel>
         </StackPanel>
-        <Button Background="#CCCCCC" Foreground="#333333" BorderBrush="DimGray" Content="Logout" Click="LogoutButton_Click" HorizontalAlignment="Left" Height="48" Margin="663,50,0,0" VerticalAlignment="Top" Width="108"/>
+        <Button Foreground="#333333" BorderBrush="DimGray" Content="LOG OUT" Background="#FFDE4E4E" FontWeight="Bold" Click="LogoutButton_Click" HorizontalAlignment="Left" Height="48" Margin="663,50,0,0" VerticalAlignment="Top" Width="108" />
     </Grid>
 </Window>

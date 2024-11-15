@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
+        Icon="logo.ico"
         Background="#FAF0E6"
         Title="AdminWindow" 
         Height="800" Width="800" 
@@ -38,11 +39,10 @@
                     <!-- CRUD Buttons -->
 
                     <!-- Data Grid for Staff -->
-                    <DataGrid Background="#FAF0E6" BorderBrush="Black" x:Name="StaffDataGrid" Grid.Row="2" Margin="10,152,10,10" AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False" SelectionMode="Single" Grid.ColumnSpan="2" SelectionChanged="dgData_SelectionChanged">
+                    <DataGrid Background="#FAF0E6" x:Name="StaffDataGrid" Grid.Row="2" Margin="10,152,10,10" AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False" SelectionMode="Single" Grid.ColumnSpan="2" SelectionChanged="dgData_SelectionChanged">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Staff ID" Binding="{Binding AccountId}" Width="Auto" />
+                            <DataGridTextColumn Header="Staff ID" Binding="{Binding AccountId}" Width="*" />
                             <DataGridTextColumn Header="Staff Name" Binding="{Binding Username}" Width="*" />
-                            <DataGridTextColumn Header="Password" Binding="{Binding PasswordHash}" Width="*" />
                             <DataGridTextColumn Header="Staff Email" Binding="{Binding Email}" Width="*" />
                             <DataGridTextColumn Header="Role" Binding="{Binding Role}" Width="*" />
                         </DataGrid.Columns>
@@ -55,7 +55,7 @@
                     <TextBox x:Name="txtSearch" HorizontalAlignment="Left" Height="41" Margin="148,98,0,0" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Width="487" Grid.Row="2" Grid.ColumnSpan="2"/>
                     <Button Content="Search" BorderBrush="#4C0013" Background="#800020" Foreground="White" HorizontalAlignment="Left" Height="45" Margin="657,94,0,0" VerticalAlignment="Top" Width="95" Click="btn_Search" Grid.Row="2"/>
                     <Label Content="Search By Name" FontSize="16" HorizontalAlignment="Left" Height="32" Margin="10,107,0,0" VerticalAlignment="Top" Width="133" Grid.Row="2"/>
-                    <Button Background="#CCCCCC" Foreground="#333333" Content="Logout" HorizontalAlignment="Left" Height="43" Margin="657,20,0,0" Grid.RowSpan="2" VerticalAlignment="Top" Width="95" Click="LogoutButton_Click" BorderBrush="DimGray"/>
+                    <Button  Foreground="#333333" Content="LOG OUT" Background="#FFDE4E4E" FontWeight="Bold" HorizontalAlignment="Left" Height="43" Margin="657,20,0,0" Grid.RowSpan="2" VerticalAlignment="Top" Width="95" Click="LogoutButton_Click" BorderBrush="DimGray"/>
                 </Grid>
             </TabItem>
 
@@ -91,11 +91,10 @@
                     </StackPanel>
 
                     <!-- Data Grid for Manager -->
-                    <DataGrid Background="#FAF0E6" BorderBrush="Black" x:Name="ManagerDataGrid" Grid.Row="2" Margin="10,152,10,10" AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False" SelectionMode="Single" SelectionChanged="dgData_SelectionChangedForMANAGER">
+                    <DataGrid Background="#FAF0E6" x:Name="ManagerDataGrid" Grid.Row="2" Margin="10,152,10,10" AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False" SelectionMode="Single" SelectionChanged="dgData_SelectionChangedForMANAGER">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Manager ID" Binding="{Binding AccountId}" Width="Auto" />
+                            <DataGridTextColumn Header="Manager ID" Binding="{Binding AccountId}" Width="*" />
                             <DataGridTextColumn Header="Manager Name" Binding="{Binding Username}" Width="*" />
-                            <DataGridTextColumn Header="Password" Binding="{Binding PasswordHash}" Width="*" />
                             <DataGridTextColumn Header="Manager Email" Binding="{Binding Email}" Width="*" />
                             <DataGridTextColumn Header="Role" Binding="{Binding Role}" Width="*" />
                         </DataGrid.Columns>
@@ -137,9 +136,9 @@
                     </StackPanel>
 
                     <!-- Data Grid for WareHouse -->
-                    <DataGrid Background="#FAF0E6" BorderBrush="Black" x:Name="WareHouseDataGrid" Grid.Row="2" Margin="10,152,10,10" AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False" SelectionMode="Single" SelectionChanged="dgData_SelectionChangedForWareHouse" Grid.ColumnSpan="2" >
+                    <DataGrid Background="#FAF0E6" x:Name="WareHouseDataGrid" Grid.Row="2" Margin="10,152,10,10" AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False" SelectionMode="Single" SelectionChanged="dgData_SelectionChangedForWareHouse" Grid.ColumnSpan="2" >
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Address" Binding="{Binding Address}" Width="Auto" />
+                            <DataGridTextColumn Header="Address" Binding="{Binding Address}" Width="*" />
                             <DataGridTextColumn Header="Contact Person Name" Binding="{Binding ContactPerson}" Width="*" />
                             <DataGridTextColumn Header="Phone Number" Binding="{Binding PhoneNumber}" Width="*" />
                             <DataGridTextColumn Header="Location" Binding="{Binding Location}" Width="*" />
