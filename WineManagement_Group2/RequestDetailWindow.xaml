@@ -76,7 +76,7 @@
                 </DataGrid>
             </TabItem>
             <TabItem Header="Requests">
-                <DataGrid x:Name="RequestsDataGrid" Grid.Row="1" Grid.Column="1" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True">
+                <DataGrid x:Name="RequestsDataGrid" Grid.Row="1" Grid.Column="1" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True" SelectionChanged="dgData_SelectionChanged">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Request ID" Binding="{Binding RequestId}" Width="*" />
                         <DataGridTextColumn Header="Staff ID" Binding="{Binding AccountId}" Width="*" />
