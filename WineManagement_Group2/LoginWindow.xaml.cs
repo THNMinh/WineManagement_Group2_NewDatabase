@@ -20,11 +20,18 @@ namespace WineWarehouseManagement
             string email = EmailTextBox.Text;
             string password = PasswordBox.Password;
 
-            // Retrieve account details based on username
+            // Retrieve account details based on email
             var account = _accountRepository.GetAccountMember(email);
 
             if (account != null && account.PasswordHash == password)
             {
+                // Check if the account is active (Status is true)
+                if (account.Status != "true")
+                {
+                    MessageBox.Show("Your account is inactive.");
+                    return;
+                }
+
                 // Check the role and navigate to the corresponding window
                 switch (account.Role)
                 {
@@ -50,6 +57,7 @@ namespace WineWarehouseManagement
                 MessageBox.Show("Invalid Email or password.");
             }
         }
+
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
