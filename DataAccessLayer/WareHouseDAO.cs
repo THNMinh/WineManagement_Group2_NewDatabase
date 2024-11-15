@@ -62,10 +62,21 @@ namespace DataAccessLayer
         {
             using (var db = new WineManagement2Context())
             {
-                var WareHouse = db.WareHouses.Find(id);
-                if (WareHouse != null)
+                var wareHouse = db.WareHouses.Find(id);
+                if (wareHouse != null)
                 {
-                    db.WareHouses.Remove(WareHouse);
+                    // Tìm các bản ghi WarehouseWines liên quan đến WareHouse này
+                    var warehouseWines = db.WarehouseWines.Where(ww => ww.WareHouseId == wareHouse.WareHouseId).ToList();
+
+                    // Xóa các bản ghi WarehouseWines
+                    db.WarehouseWines.RemoveRange(warehouseWines);
+
+                    // Cập nhật trạng thái của WareHouse thành "false"
+                    wareHouse.Location = "";
+                    wareHouse.Status = "false";
+                    db.WareHouses.Update(wareHouse);
+
+                    // Lưu thay đổi
                     db.SaveChanges();
                 }
             }

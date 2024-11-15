@@ -418,9 +418,9 @@ namespace WineWarehouseManagement
                     var WareHouseToUpdate = _wareHouseDAO.GetWareHouseById(selectedWareHouse.WareHouseId);
                     if (WareHouseToUpdate != null)
                     {
-                        WareHouseToUpdate.Status = "False";
+                        //WareHouseToUpdate.Status = "False";
 
-                        _wareHouseDAO.UpdateWareHouse(WareHouseToUpdate);
+                        _wareHouseDAO.DeleteWareHouse2(WareHouseToUpdate.WareHouseId);
                         LoadWareHouseList();
                         ClearWareHouseFields();
                     }
