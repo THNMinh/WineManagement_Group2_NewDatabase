@@ -448,10 +448,20 @@ namespace WineWarehouseManagement
                 MessageBox.Show("Please fill in all required fields.", "Missing Information", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
-            Category newCategory = new Category { 
+
+            // Check if the CategoryName already exists
+            if (_categoryDAO.GetAllCategories().Any(c => c.CategoryName.Equals(CategoryNameTextBox.Text, StringComparison.OrdinalIgnoreCase)))
+            {
+                MessageBox.Show("Category name already exists. Please use a different name.", "Duplicate Category", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            // Create and add a new category
+            Category newCategory = new Category
+            {
                 CategoryName = CategoryNameTextBox.Text,
                 Description = DescriptionTextBox.Text,
-            
+                Status = "Active" // Optionally, set a default status
             };
 
             _categoryDAO.AddCategory(newCategory);
@@ -461,13 +471,21 @@ namespace WineWarehouseManagement
 
             // Clear the input fields
             ClearInputFields3();
-
         }
 
         private void UpdateCategoryButton_Click(object sender, RoutedEventArgs e)
         {
             if (CategoryDataGrid.SelectedItem is Category selectedCategory)
             {
+                // Check if the updated CategoryName is already in use by another category
+                if (_categoryDAO.GetAllCategories()
+                    .Any(c => c.CategoryId != selectedCategory.CategoryId &&
+                              c.CategoryName.Equals(CategoryNameTextBox.Text, StringComparison.OrdinalIgnoreCase)))
+                {
+                    MessageBox.Show("Category name already exists. Please use a different name.", "Duplicate Category", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
                 // Update the category's properties with the new values
                 selectedCategory.CategoryName = CategoryNameTextBox.Text;
                 selectedCategory.Description = DescriptionTextBox.Text;
@@ -483,7 +501,6 @@ namespace WineWarehouseManagement
             {
                 MessageBox.Show("Please select a category to update.");
             }
-
         }
 
         private void DeleteCategoryButton_Click(object sender, RoutedEventArgs e)

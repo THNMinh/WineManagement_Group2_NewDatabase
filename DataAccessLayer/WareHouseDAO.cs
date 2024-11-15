@@ -97,7 +97,7 @@ namespace DataAccessLayer
                 var result = from ww in db.WarehouseWines
                              join wh in db.WareHouses on ww.WareHouseId equals wh.WareHouseId
                              join w in db.Wines on ww.WineId equals w.WineId
-                             where wh.Status == "True"  // Only active warehouses
+                             where wh.Status == null  // Only active warehouses
                              select new
                              {
                                  WineName = w.Name,
