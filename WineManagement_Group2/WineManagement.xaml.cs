@@ -127,14 +127,32 @@ namespace WineWarehouseManagement
 
         private void CreateWineButton_Click(object sender, RoutedEventArgs e)
         {
+
+            // Validate input fields
             if (string.IsNullOrWhiteSpace(WineNameTextBox.Text) ||
                 string.IsNullOrWhiteSpace(VintageYearTextBox.Text) ||
                 string.IsNullOrWhiteSpace(PriceBox.Text) ||
-                string.IsNullOrWhiteSpace(AlcoholContentBox.Text) || 
-                string.IsNullOrWhiteSpace(CategoryComboBox.Text) || 
+                string.IsNullOrWhiteSpace(AlcoholContentBox.Text) ||
+                string.IsNullOrWhiteSpace(CategoryComboBox.Text) ||
                 string.IsNullOrWhiteSpace(SupplierComboBox.Text))
             {
                 MessageBox.Show("Please fill in all required fields.", "Missing Information", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            // Validate integers (VintageYear, Price, AlcoholContent)
+            if (!int.TryParse(VintageYearTextBox.Text, out int vintageYear) ||
+                !decimal.TryParse(PriceBox.Text, out decimal price) ||
+                !decimal.TryParse(AlcoholContentBox.Text, out decimal alcoholContent))
+            {
+                MessageBox.Show("Vintage Year, Price, and Alcohol Content must be numbers.", "Invalid Input", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            // Validate VintageYear <= 2024
+            if (vintageYear > 2024)
+            {
+                MessageBox.Show("Vintage Year cannot be greater than the current year (2024).", "Invalid Vintage Year", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
@@ -142,9 +160,9 @@ namespace WineWarehouseManagement
             Wine newWine = new Wine
             {
                 Name = WineNameTextBox.Text,
-                VintageYear = int.Parse(VintageYearTextBox.Text),
-                Price = decimal.Parse(PriceBox.Text),
-                AlcoholContent = decimal.Parse(AlcoholContentBox.Text),
+                VintageYear = vintageYear,
+                Price = price,
+                AlcoholContent = alcoholContent,
                 CategoryId = (int)CategoryComboBox.SelectedValue,
                 SupplierId = (int)SupplierComboBox.SelectedValue
             };
@@ -262,6 +280,21 @@ namespace WineWarehouseManagement
 
         }
 
+        private bool IsEmailUnique(string email)
+        {
+            return !_supplierDAO.GetAllSuppliers().Any(a => a.Email.Equals(email, StringComparison.OrdinalIgnoreCase));
+        }
+
+        private bool IsPhoneUnique(string email)
+        {
+            return !_supplierDAO.GetAllSuppliers().Any(a => a.Phone.Equals(email, StringComparison.OrdinalIgnoreCase));
+        }
+
+        private bool IsPhoneNumberValid(string phoneNumber)
+        {
+            return phoneNumber.All(char.IsDigit);
+        }
+
         private void CreateSupplierButton_Click(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrWhiteSpace(SupplierNameTextBox.Text) ||
@@ -273,6 +306,29 @@ namespace WineWarehouseManagement
                 MessageBox.Show("Please fill in all required fields.", "Missing Information", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
+
+
+            if (!IsEmailUnique(EmailTextBox.Text))
+            {
+                MessageBox.Show("This email is already in use. Please use a different email address.", "Duplicate Email", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+
+            // Validate phone number
+            if (!IsPhoneNumberValid(PhoneTextBox.Text))
+            {
+                MessageBox.Show("Phone number must only contain digits.", "Invalid Phone Number", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            if (!IsPhoneUnique(PhoneTextBox.Text))
+            {
+                MessageBox.Show("This phone number is already in use. Please use a different please.", "Duplicate Email", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+
             Supplier newSupplier = new Supplier
             {
                 Name = SupplierNameTextBox.Text,

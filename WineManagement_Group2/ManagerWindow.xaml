@@ -56,12 +56,12 @@
             <Button Content="Update" Width="80" Margin="5" Click="UpdateButton_Click" Background="#800020" BorderBrush="#4C0013"/>
             <Button Content="Create" Width="80" Margin="5" Click="CreateButton_Click" Background="#800020" BorderBrush="#4C0013"/>
             <Button Content="Delete" Width="80" Margin="5" Click="DeleteButton_Click" Background="#800020" BorderBrush="#4C0013"/>
-           
+
 
         </StackPanel>
 
         <!-- DataGrid for displaying staff -->
-        <DataGrid Background="#FAF0E6" x:Name="StaffDataGrid" Grid.Row="4" Grid.ColumnSpan="2" AutoGenerateColumns="False" CanUserAddRows="False" Margin="5" IsReadOnly="True" SelectionChanged="dgData_SelectionChanged">
+        <DataGrid Background="#FAF0E6" x:Name="StaffDataGrid" Grid.Row="5" Grid.ColumnSpan="2" AutoGenerateColumns="False" CanUserAddRows="False" Margin="5,0,5,0" IsReadOnly="True" SelectionChanged="dgData_SelectionChanged">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Staff ID" Binding="{Binding AccountId}" Width="*" />
                 <DataGridTextColumn Header="Staff Name" Binding="{Binding Username}" Width="*" />
