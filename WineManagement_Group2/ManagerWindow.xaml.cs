@@ -135,7 +135,8 @@ namespace WineWarehouseManagement
                 Username = StaffNameTextBox.Text,
                 Email = StaffEmailTextBox.Text,
                 PasswordHash = StaffPasswordBox.Text,
-                Role = "Staff"
+                Role = "Staff",
+                Status = "true"
             };
 
             _accountDAO.AddAccount(newStaff);
