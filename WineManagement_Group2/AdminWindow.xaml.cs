@@ -354,7 +354,6 @@ namespace WineWarehouseManagement
             WareHouse newWareHouse = new WareHouse
             {
                 Address = WareHouseAddressTextBox.Text,
-                Status = "True",
                 ContactPerson = ContactPersonTextBox.Text,
                 PhoneNumber = PhoneNumberTextBox.Text,
                 Location = LocationTextBox.Text
