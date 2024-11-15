@@ -367,21 +367,30 @@ namespace WineWarehouseManagement
 
             if (WareHouseDataGrid.SelectedItem is WareHouse selectedWareHouse)
             {
-                if (!IsLocationUnique(LocationTextBox.Text))
-                {
-                    MessageBox.Show("This location is already in have. Please use a different location.", "Duplicate Location", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    return;
-                }
-
-                if (!IsValidPhoneNumber(PhoneNumberTextBox.Text))
-                {
-                    MessageBox.Show("Please enter a valid Phone Number (e.g., 0525462579).", "Invalid Phone", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    return;
-                }
-
+                // Lấy WareHouse hiện tại từ database để kiểm tra
                 var WareHouseToUpdate = _wareHouseDAO.GetWareHouseById(selectedWareHouse.WareHouseId);
+
                 if (WareHouseToUpdate != null)
                 {
+                    // Kiểm tra nếu Location đã thay đổi
+                    if (!WareHouseToUpdate.Location.Equals(LocationTextBox.Text, StringComparison.OrdinalIgnoreCase))
+                    {
+                        // Kiểm tra Location mới có tồn tại ở các WareHouse khác không
+                        if (!IsLocationUnique(LocationTextBox.Text))
+                        {
+                            MessageBox.Show("This location is already in use by another warehouse. Please use a different location.", "Duplicate Location", MessageBoxButton.OK, MessageBoxImage.Warning);
+                            return;
+                        }
+                    }
+
+                    // Kiểm tra số điện thoại
+                    if (!IsValidPhoneNumber(PhoneNumberTextBox.Text))
+                    {
+                        MessageBox.Show("Please enter a valid Phone Number (e.g., 0525462579).", "Invalid Phone", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        return;
+                    }
+
+                    // Cập nhật thông tin
                     WareHouseToUpdate.Address = WareHouseAddressTextBox.Text;
                     WareHouseToUpdate.ContactPerson = ContactPersonTextBox.Text;
                     WareHouseToUpdate.PhoneNumber = PhoneNumberTextBox.Text;

@@ -151,10 +151,23 @@ namespace WineWarehouseManagement
 
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
-            if (WineNameComboBox.SelectedValue != null && int.TryParse(QuantityTextBox.Text, out int quantity))
+            if (WineNameComboBox.SelectedValue != null &&
+                ExpportComboBox.SelectedValue != null && // Check that ExpportComboBox is not null
+                int.TryParse(QuantityTextBox.Text, out int quantity))
             {
                 int wineId = (int)WineNameComboBox.SelectedValue;
-                bool isExport = ExpportComboBox.SelectedValue.ToString() == "true";
+                bool isExport;
+
+                // Validate the selected value of ExpportComboBox
+                try
+                {
+                    isExport = ExpportComboBox.SelectedValue.ToString() == "true";
+                }
+                catch
+                {
+                    MessageBox.Show("Invalid export selection. Please select a valid option.");
+                    return;
+                }
 
                 // If export is false (Import), check quantity availability
                 if (!isExport)
@@ -185,16 +198,6 @@ namespace WineWarehouseManagement
                         LoadRequest(); // Refresh the request data grid
                         ClearRequestDetailFields();
 
-                        //// If export is false, reduce stock quantity
-                        //if (!isExport)
-                        //{
-                        //    var warehouseWine = _context.WarehouseWines.FirstOrDefault(ww => ww.WineId == wineId);
-                        //    if (warehouseWine != null)
-                        //    {
-                        //        warehouseWine.Quantity -= quantity;
-                        //        _context.SaveChanges();
-                        //    }
-                        //}
                     }
                     catch (Exception ex)
                     {
@@ -208,7 +211,13 @@ namespace WineWarehouseManagement
             }
             else
             {
-                MessageBox.Show("Please select a wine and enter a valid quantity.");
+                // Show appropriate error messages for missing fields
+                if (WineNameComboBox.SelectedValue == null)
+                    MessageBox.Show("Please select a wine.");
+                else if (ExpportComboBox.SelectedValue == null)
+                    MessageBox.Show("Please select export/import option.");
+                else
+                    MessageBox.Show("Please enter a valid quantity.");
             }
         }
 
