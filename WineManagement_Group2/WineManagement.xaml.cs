@@ -192,6 +192,33 @@ namespace WineWarehouseManagement
 
         private void UpdateWineButton_Click(object sender, RoutedEventArgs e)
         {
+            // Validate input fields
+            if (string.IsNullOrWhiteSpace(WineNameTextBox.Text) ||
+                string.IsNullOrWhiteSpace(VintageYearTextBox.Text) ||
+                string.IsNullOrWhiteSpace(PriceBox.Text) ||
+                string.IsNullOrWhiteSpace(AlcoholContentBox.Text) ||
+                string.IsNullOrWhiteSpace(CategoryComboBox.Text) ||
+                string.IsNullOrWhiteSpace(SupplierComboBox.Text))
+            {
+                MessageBox.Show("Please fill in all required fields.", "Missing Information", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            // Validate integers (VintageYear, Price, AlcoholContent)
+            if (!int.TryParse(VintageYearTextBox.Text, out int vintageYear) ||
+                !decimal.TryParse(PriceBox.Text, out decimal price) ||
+                !decimal.TryParse(AlcoholContentBox.Text, out decimal alcoholContent))
+            {
+                MessageBox.Show("Vintage Year, Price, and Alcohol Content must be numbers.", "Invalid Input", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            // Validate VintageYear <= 2024
+            if (vintageYear > 2024)
+            {
+                MessageBox.Show("Vintage Year cannot be greater than the current year (2024).", "Invalid Vintage Year", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
             if (StaffDataGrid.SelectedItem is Wine selectedWine)
             {
                 // Update the wine's properties with the new values
@@ -316,11 +343,12 @@ namespace WineWarehouseManagement
 
 
             // Validate phone number
-            if (!IsPhoneNumberValid(PhoneTextBox.Text))
+            if (string.IsNullOrWhiteSpace(PhoneTextBox.Text) || !IsPhoneNumberValid(PhoneTextBox.Text) || PhoneTextBox.Text.Length != 10)
             {
-                MessageBox.Show("Phone number must only contain digits.", "Invalid Phone Number", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Phone number must be filled, only contain digits, and be 10 digits long.", "Invalid Phone Number", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
+            
 
             if (!IsPhoneUnique(PhoneTextBox.Text))
             {
@@ -364,6 +392,38 @@ namespace WineWarehouseManagement
 
         private void UpdateSupplierButton_Click(object sender, RoutedEventArgs e)
         {
+            if (string.IsNullOrWhiteSpace(SupplierNameTextBox.Text) ||
+               string.IsNullOrWhiteSpace(ContactPersonTextBox.Text) ||
+               string.IsNullOrWhiteSpace(PhoneTextBox.Text) ||
+               string.IsNullOrWhiteSpace(EmailTextBox.Text) ||
+               string.IsNullOrWhiteSpace(AddressTextBox.Text))
+            {
+                MessageBox.Show("Please fill in all required fields.", "Missing Information", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+
+            if (!IsEmailUnique(EmailTextBox.Text))
+            {
+                MessageBox.Show("This email is already in use. Please use a different email address.", "Duplicate Email", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+
+            // Validate phone number
+            if (string.IsNullOrWhiteSpace(PhoneTextBox.Text) || !IsPhoneNumberValid(PhoneTextBox.Text) || PhoneTextBox.Text.Length != 10)
+            {
+                MessageBox.Show("Phone number must be filled, only contain digits, and be 10 digits long.", "Invalid Phone Number", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            if (!IsPhoneUnique(PhoneTextBox.Text))
+            {
+                MessageBox.Show("This phone number is already in use. Please use a different please.", "Duplicate Email", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+
             if (ManagerDataGrid.SelectedItem is Supplier selectedSupplier)
             {
                 // Update the supplier's properties with the new values
@@ -475,6 +535,13 @@ namespace WineWarehouseManagement
 
         private void UpdateCategoryButton_Click(object sender, RoutedEventArgs e)
         {
+            if (string.IsNullOrWhiteSpace(CategoryNameTextBox.Text) ||
+               string.IsNullOrWhiteSpace(DescriptionTextBox.Text))
+            {
+                MessageBox.Show("Please fill in all required fields.", "Missing Information", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
             if (CategoryDataGrid.SelectedItem is Category selectedCategory)
             {
                 // Check if the updated CategoryName is already in use by another category
