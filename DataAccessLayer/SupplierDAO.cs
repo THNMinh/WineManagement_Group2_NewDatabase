@@ -51,6 +51,20 @@ namespace DataAccessLayer
                 var supplier = db.Suppliers.Find(id);
                 if (supplier != null)
                 {
+                    supplier.Status = "false";
+                    db.Suppliers.Update(supplier);
+                    db.SaveChanges();
+                }
+            }
+        }
+
+        public void DeleteSupplier2(int id)
+        {
+            using (var db = new WineManagement2Context())
+            {
+                var supplier = db.Suppliers.Find(id);
+                if (supplier != null)
+                {
                     db.Suppliers.Remove(supplier);
                     db.SaveChanges();
                 }

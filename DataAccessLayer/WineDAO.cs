@@ -52,6 +52,22 @@ namespace DataAccessLayer
                 var wine = db.Wines.Find(id);
                 if (wine != null)
                 {
+                    wine.Status = "false";
+                    db.Wines.Remove(wine);
+                    db.SaveChanges();
+                }
+            }
+        }
+
+
+
+        public void DeleteWine2(int id)
+        {
+            using (var db = new WineManagement2Context())
+            {
+                var wine = db.Wines.Find(id);
+                if (wine != null)
+                {
                     db.Wines.Remove(wine);
                     db.SaveChanges();
                 }

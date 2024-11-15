@@ -51,6 +51,20 @@ namespace DataAccessLayer
                 var category = db.Categories.Find(id);
                 if (category != null)
                 {
+                    category.Status = "false";
+                    db.Categories.Update(category);
+                    db.SaveChanges();
+                }
+            }
+        }
+
+        public void DeleteCategory2(int id)
+        {
+            using (var db = new WineManagement2Context())
+            {
+                var category = db.Categories.Find(id);
+                if (category != null)
+                {
                     db.Categories.Remove(category);
                     db.SaveChanges();
                 }

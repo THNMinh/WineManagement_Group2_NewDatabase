@@ -40,7 +40,22 @@ namespace DataAccessLayer
             }
         }
 
+
         public void DeleteAccount(int id)
+        {
+            using (var db = new WineManagement2Context())
+            {
+                var account = db.Accounts.Find(id);
+                if (account != null)
+                {
+                    account.Status = "false";
+                    db.Accounts.Update(account);
+                    db.SaveChanges();
+                }
+            }
+        }
+
+        public void DeleteAccount2(int id)
         {
             using (var db = new WineManagement2Context())
             {
