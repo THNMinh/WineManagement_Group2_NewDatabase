@@ -14,6 +14,10 @@ namespace WineWarehouseManagement
         private readonly IWareHouseRepository _wareHouseDAO;
         private readonly IWineRepository _wineDAO;
         private readonly IWarehouseWineRepository _repo;
+        private IEnumerable<dynamic> originalData;
+        private bool isUpdating = false; // Flag to track if update is in progress
+        private bool isDeleting = false; // Cờ để theo dõi trạng thái xóa
+
 
         public AddWineWarehouseWindow()
         {
@@ -33,33 +37,74 @@ namespace WineWarehouseManagement
             LocationComboBox.ItemsSource = _wareHouseDAO.GetAllWareHouses();
         }
 
+
         private void SearchButton_Click(object sender, RoutedEventArgs e)
         {
             if (LocationComboBox.SelectedValue is string selectedLocation)
             {
-                // Fetch all details and then filter by the selected location
-                var allDetails = _wareHouseDAO.GetWareHouseWineDetails();
-
-                // Apply the location filter
-                var filteredDetails = allDetails
-                    .Where(ww => ww.GetType().GetProperty("Location")?.GetValue(ww)?.ToString() == selectedLocation)
+                // Lọc dữ liệu dựa trên vị trí được chọn
+                var filteredDetails = originalData
+                    .Where(ww => ww.Location.Equals(selectedLocation, StringComparison.OrdinalIgnoreCase))
                     .ToList();
 
-                // Bind the filtered data to the DataGrid
-                WareHousesDataGrid.ItemsSource = filteredDetails;
+                if (filteredDetails.Any())
+                {
+                    WareHousesDataGrid.ItemsSource = filteredDetails;
+                }
+                else
+                {
+                    MessageBox.Show("No records found for the selected location.");
+                }
+
+                // Giữ trạng thái của ComboBox
+                LocationComboBox.SelectedValue = -1;
             }
             else
             {
-                MessageBox.Show("Please select a location to search.");
+                LoadWareHouseWineList();
             }
         }
 
+        private void ResetSearch()
+        {
+            WareHousesDataGrid.ItemsSource = originalData; // Khôi phục dữ liệu gốc
+        }
 
 
+
+
+        //private void LoadWareHouseWineList()
+        //{
+        //    WareHousesDataGrid.ItemsSource = _wareHouseDAO.GetWareHouseWineDetails();
+        //}
         private void LoadWareHouseWineList()
         {
-            WareHousesDataGrid.ItemsSource = _wareHouseDAO.GetWareHouseWineDetails();
+
+            using (var db = new WineManagement2Context())
+            {
+                var wareHouseWineDetails = from ww in db.WarehouseWines
+                                           join wh in db.WareHouses on ww.WareHouseId equals wh.WareHouseId
+                                           join w in db.Wines on ww.WineId equals w.WineId
+                                           where wh.Status == "True"  // Chỉ lấy các kho đang hoạt động
+                                           select new
+                                           {
+                                               WarehouseWineId = ww.WarehouseWineId,
+                                               WineId = ww.WineId,
+                                               WareHouseId = ww.WareHouseId,
+                                               WineName = w.Name,
+                                               Address = wh.Address,
+                                               ContactPerson = wh.ContactPerson,
+                                               PhoneNumber = wh.PhoneNumber,
+                                               Location = wh.Location,
+                                               Quantity = ww.Quantity,
+                                               Description = ww.Description
+                                           };
+
+                originalData = wareHouseWineDetails.ToList(); // Lưu trữ dữ liệu gốc
+                WareHousesDataGrid.ItemsSource = originalData;
+            }
         }
+
 
         private void LoadWineList()
         {
@@ -87,20 +132,50 @@ namespace WineWarehouseManagement
             }
         }
 
+
         private void WareHousesDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (WareHousesDataGrid.SelectedItem is WarehouseWine selectedWarehouseWine)
-            {
-                var viewModel = (AddWineWarehouseViewModel)DataContext;
-                viewModel.SelectedWineId = selectedWarehouseWine.WineId;
-                viewModel.SelectedWareHouseId = selectedWarehouseWine.WareHouseId;
-                viewModel.Quantity = selectedWarehouseWine.Quantity.Value;
-                viewModel.Description = selectedWarehouseWine.Description;
+            // Kiểm tra nếu có item được chọn
+            var selectedItem = WareHousesDataGrid.SelectedItem;
 
-                WineComboBox.SelectedValue = viewModel.SelectedWineId;
-                WarehouseComboBox.SelectedValue = viewModel.SelectedWareHouseId;
-                QuantityBox.Text = viewModel.Quantity.ToString();
-                DescriptionBox.Text = viewModel.Description;
+            if (isDeleting)
+            {
+                isDeleting = false; // Tắt cờ sau khi hoàn tất xóa
+                return;
+            }
+            if (isUpdating)
+            {
+                isUpdating = false; // T?t c? sau khi ho?n t?t cập nhật
+                return;
+            }
+
+            if (selectedItem != null)
+            {
+                // Ép kiểu item được chọn về kiểu dữ liệu cụ thể
+                dynamic selectedData = selectedItem;
+
+                // Lấy giá trị từ các thuộc tính
+                WineComboBox.SelectedValue = selectedData.WineId;
+                WarehouseComboBox.SelectedValue = selectedData.WareHouseId;
+                QuantityBox.Text = selectedData.Quantity?.ToString();
+                DescriptionBox.Text = selectedData.Description;
+            }
+            else
+            {
+                // Xử lý khi không có item nào được chọn
+                MessageBox.Show("Please select a valid record.");
+            }
+        }
+
+
+
+        private bool DuplicateWarehouseWineExists(int wineId, int? warehouseWineId = null)
+        {
+            using (var db = new WineManagement2Context())
+            {
+                return db.WarehouseWines.Any(ww =>
+                    ww.WineId == wineId &&
+                    (!warehouseWineId.HasValue || ww.WarehouseWineId != warehouseWineId));
             }
         }
 
@@ -156,62 +231,134 @@ namespace WineWarehouseManagement
         {
             var viewModel = (AddWineWarehouseViewModel)DataContext;
 
-            // Check if all required fields have values
+            // Lấy dữ liệu từ các ô nhập liệu
+            if (WineComboBox.SelectedValue is int selectedWineId)
+            {
+                viewModel.SelectedWineId = selectedWineId;
+            }
+
+            if (WarehouseComboBox.SelectedValue is int selectedWarehouseId)
+            {
+                viewModel.SelectedWareHouseId = selectedWarehouseId;
+            }
+
+            if (int.TryParse(QuantityBox.Text, out int quantity))
+            {
+                viewModel.Quantity = quantity;
+            }
+
+            viewModel.Description = DescriptionBox.Text?.Trim();
+
+            // Kiểm tra giá trị hợp lệ
             if (!viewModel.SelectedWineId.HasValue || !viewModel.SelectedWareHouseId.HasValue || viewModel.Quantity <= 0 || string.IsNullOrWhiteSpace(viewModel.Description))
             {
                 MessageBox.Show("Please make sure no field is empty and quantity is greater than 0.");
                 return;
             }
 
-            // Ensure an item is selected in the DataGrid for update
-            if (WareHousesDataGrid.SelectedItem is WarehouseWine selectedWarehouseWine)
+            // Kiểm tra xem một dòng đã được chọn trong DataGrid hay chưa
+            if (WareHousesDataGrid.SelectedItem != null)
             {
-                if (!DuplicateWarehouseWineExists(viewModel.SelectedWineId.Value))
+                // Lấy bản ghi từ DataGrid
+                var selectedData = WareHousesDataGrid.SelectedItem;
+
+                // Kiểm tra xem selectedData có thuộc tính "WarehouseWineId" hay không
+                var propertyInfo = selectedData.GetType().GetProperty("WarehouseWineId");
+
+                if (propertyInfo != null)
                 {
-                    // Update the selected WarehouseWine details with values from the view model
-                    selectedWarehouseWine.WineId = viewModel.SelectedWineId.Value;
-                    selectedWarehouseWine.WareHouseId = viewModel.SelectedWareHouseId.Value;
-                    selectedWarehouseWine.Quantity = viewModel.Quantity;
-                    selectedWarehouseWine.Description = viewModel.Description;
+                    int warehouseWineId = (int)propertyInfo.GetValue(selectedData);
 
-                    // Call repository update method
-                    _repo.UpdateWarehouseWine(selectedWarehouseWine);
+                    // Kiểm tra trùng lặp
+                    if (!DuplicateWarehouseWineExists(viewModel.SelectedWineId.Value, warehouseWineId))
+                    {
+                        // Set the flag to skip selection changed validation during update
+                        isUpdating = true;
 
-                    // Refresh the data grid to show updated information
-                    LoadWareHouseWineList();
+                        // Cập nhật thông tin
+                        using (var db = new WineManagement2Context())
+                        {
+                            var existingWarehouseWine = db.WarehouseWines.FirstOrDefault(ww => ww.WarehouseWineId == warehouseWineId);
 
-                    // Clear the fields after updating
-                    viewModel.SelectedWineId = null;
-                    viewModel.SelectedWareHouseId = null;
-                    viewModel.Quantity = 0;
-                    viewModel.Description = "";
+                            if (existingWarehouseWine != null)
+                            {
+                                // Cập nhật thông tin
+                                existingWarehouseWine.WineId = viewModel.SelectedWineId.Value;
+                                existingWarehouseWine.WareHouseId = viewModel.SelectedWareHouseId.Value;
+                                existingWarehouseWine.Quantity = viewModel.Quantity;
+                                existingWarehouseWine.Description = viewModel.Description;
 
-                    MessageBox.Show("Warehouse-Wine record updated successfully.");
+                                db.SaveChanges();
+                            }
+                        }
+
+                        // Làm mới DataGrid
+                        LoadWareHouseWineList();
+
+                        // Xóa các trường nhập liệu sau khi cập nhật
+                        WineComboBox.SelectedValue = null;
+                        WarehouseComboBox.SelectedValue = null;
+                        QuantityBox.Clear();
+                        DescriptionBox.Clear();
+
+                        MessageBox.Show("Warehouse-Wine record updated successfully.");
+                    }
+                    else
+                    {
+                        MessageBox.Show("This wine already exists in warehouse.");
+                    }
                 }
-                else
-                {
-                    MessageBox.Show("This wine already exists in warehouse.");
-                }
-            }
-            else
-            {
-                MessageBox.Show("Please select a Warehouse-Wine record to update.");
             }
         }
+
+
+
+
+
+
 
 
         private void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
-            if (WareHousesDataGrid.SelectedItem is WarehouseWine selectedWarehouseWine)
+            var selectedRow = WareHousesDataGrid.SelectedItem as dynamic;
+
+            if (selectedRow == null)
             {
-                _repo.DeleteWarehouseWine(selectedWarehouseWine.WarehouseWineId);
-                LoadWareHouseWineList(); // Refresh the list after deleting
+                MessageBox.Show("Please select a valid Warehouse-Wine record to delete.");
+                return;
             }
-            else
+
+            int warehouseWineId = selectedRow.WarehouseWineId;
+
+            var result = MessageBox.Show(
+                "Are you sure you want to delete this record?",
+                "Delete Confirmation",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning);
+
+            if (result == MessageBoxResult.Yes)
             {
-                MessageBox.Show("Please select a Warehouse-Wine record to delete.");
+                try
+                {
+                    // Bật cờ xóa
+                    isDeleting = true;
+
+                    // Xóa bản ghi
+                    _repo.DeleteWarehouseWine(warehouseWineId);
+
+                    // Làm mới DataGrid
+                    LoadWareHouseWineList();
+
+                    MessageBox.Show("Warehouse-Wine record deleted successfully.");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error while deleting record: {ex.Message}");
+                }
             }
         }
+
+
 
         private void BacktoManagerHomePage_click(object sender, RoutedEventArgs e)
         {
@@ -219,5 +366,8 @@ namespace WineWarehouseManagement
             managerWindow.Show();
             this.Close();
         }
+
+
+
     }
 }

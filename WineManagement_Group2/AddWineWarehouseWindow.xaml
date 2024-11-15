@@ -41,11 +41,11 @@
           SelectedValue="{Binding SelectedWareHouseId, Mode=TwoWay}"/>
 
             <Label Grid.Row="2" Grid.Column="0" Content="Quantity:" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
-            <TextBox x:Name="QuantityBox" Grid.Row="2" Grid.Column="1" Margin="67,10,582,24" Grid.RowSpan="2"/>
+            <TextBox x:Name="QuantityBox" Grid.Row="2" Grid.Column="1" Text="{Binding Quantity, Mode=TwoWay}" Margin="67,8,582,24" Grid.RowSpan="2" />
 
             <Label Grid.Row="2" Grid.Column="1" Content="Description:" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,8,363,0"/>
 
-            <TextBox x:Name="DescriptionBox" Grid.Row="2" Grid.Column="1" Margin="474,7,149,3"/>
+            <TextBox x:Name="DescriptionBox" Grid.Row="2" Text="{Binding Description, Mode=TwoWay}" Margin="474,10,149,2" Grid.Column="1" />
 
             <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Left" Margin="158,4,0,14" Grid.RowSpan="2" Grid.Column="1">
 
@@ -56,7 +56,7 @@
 
             </StackPanel>
 
-            <DataGrid x:Name="WareHousesDataGrid" Grid.Row="5" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True" Grid.ColumnSpan="2" SelectionChanged="WareHousesDataGrid_SelectionChanged" Margin="0,66,0,0">
+            <DataGrid x:Name="WareHousesDataGrid" AutoGenerateColumns="False" Grid.Row="5" CanUserAddRows="False" IsReadOnly="True" Grid.ColumnSpan="2" Margin="0,66,0,0" SelectionChanged="WareHousesDataGrid_SelectionChanged">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Wine Name" Binding="{Binding WineName}" Width="*" />
                     <DataGridTextColumn Header="WareHouse Address" Binding="{Binding Address}" Width="*" />
