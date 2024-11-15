@@ -120,8 +120,8 @@ namespace WineWarehouseManagement
                     {
                         WareHouseId = viewModel.SelectedWareHouseId.Value,
                         WineId = viewModel.SelectedWineId.Value,
-                        Quantity = viewModel.Quantity,
-                        Description = viewModel.Description
+                        Quantity = int.Parse(QuantityBox.Text),
+                        Description = DescriptionBox.Text
                     };
 
                     _repo.AddWarehouseWine(newWarehouseWine);

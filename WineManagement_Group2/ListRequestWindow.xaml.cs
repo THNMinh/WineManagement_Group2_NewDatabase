@@ -145,7 +145,7 @@ namespace WineWarehouseManagement
                     var request = _requestDAO.GetRequestById(requestDetailId);
                     if (request != null)
                     {
-                        request.Status = "Rejected";
+                        request.Status = "Accept";
 
 
                         try
@@ -179,7 +179,7 @@ namespace WineWarehouseManagement
                     var request = _requestDAO.GetRequestById(requestDetailId);
                     if (request != null)
                     {
-                        request.Status = "Rejected";
+                        request.Status = "Accept";
 
 
                         try
