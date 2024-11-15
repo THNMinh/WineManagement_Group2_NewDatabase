@@ -69,6 +69,7 @@ namespace WineWarehouseManagement
 
         public class RequestData()
         {
+            public int WineId { get; set; }
             public int RequestId { get; set; }
             public int RequestDetailId { get; set; }
             public int AccountId { get; set; }
@@ -85,6 +86,7 @@ namespace WineWarehouseManagement
                 .Include(rd => rd.Wine)     // Include related Wine entity
                 .Select(rd => new RequestData
                 {
+                    WineId = rd.WineId ?? 0,
                     RequestId = rd.RequestId ?? 0,
                     RequestDetailId = rd.RequestDetailId,
                     AccountId = rd.Request != null ? rd.Request.AccountId ?? 0 : 0,
@@ -104,45 +106,51 @@ namespace WineWarehouseManagement
 
 
 
-
-        //public void LoadRequest()
-        //{
-        //    RequestsDataGrid.ItemsSource = _requestDetailDAO.GetAllRequestDetails();
-        //    RequestsDataGrid.ItemsSource = _requestDAO.GetAllRequests();
-        //}
-
-        //private void ReadButton_Click(object sender, RoutedEventArgs e)
-        //{
-        //    if (RequestsDataGrid.SelectedItem is RequestData selectedStaff)
-        //    {
-        //        // Populate text fields with the selected staff information
-        //        RequestIDBox.Text = selectedStaff.RequestId.ToString();
-
-        //    }
-        //    else
-        //    {
-        //        MessageBox.Show("Please select a staff member to read.");
-        //    }
-        //}
-
         private void UpdateButton_Click(object sender, RoutedEventArgs e)
         {
+            if (RequestsDataGrid.SelectedItem is RequestData selectedRequest)
             {
-                if (RequestsDataGrid.SelectedItem is RequestData selectedRequest)
+                if (selectedRequest.Status != "Pending")
                 {
+                    MessageBox.Show("This request cannot Accept/Reject.");
+                    return;
+                }
+                int requestDetailId = selectedRequest.RequestDetailId;
+                int wineId = selectedRequest.WineId;
+                bool isExport = selectedRequest.Export == "Import";
+                int quantity = selectedRequest.Quantity;
 
-                    int requestDetailId = selectedRequest.RequestDetailId; // Correct ID for RequestDetail
+                // Lấy RequestDetail từ repository
+                var requestDetail = _requestDetailDAO.GetRequestDetailById(requestDetailId);
+                if (requestDetail == null)
+                {
+                    MessageBox.Show("Request detail not found.");
+                    return;
+                }
 
+                // Lấy WarehouseWine dựa trên WineId
+                var warehouseWine = _context.WarehouseWines.FirstOrDefault(ww => ww.WineId == wineId);
+                if (warehouseWine == null)
+                {
+                    MessageBox.Show("WineId does not exist in WarehouseWine. Update not allowed.");
+                    return;
+                }
 
-                    var requestDetail = _requestDAO.GetRequestById(requestDetailId);
-                    if (requestDetail != null)
+                // Kiểm tra điều kiện Export
+                if (isExport)
+                {
+                    // Nếu là Export, cộng Quantity vào WarehouseWine
+                    warehouseWine.Quantity += quantity;
+
+                    var request = _requestDAO.GetRequestById(requestDetailId);
+                    if (request != null)
                     {
-                        requestDetail.Status = "Accepted";
+                        request.Status = "Rejected";
 
 
                         try
                         {
-                            _requestDAO.UpdateRequest(requestDetail);
+                            _requestDAO.UpdateRequest(request);
                             MessageBox.Show("Request detail updated successfully.");
                             LoadRequest(); // Refresh the request data grid
 
@@ -156,15 +164,63 @@ namespace WineWarehouseManagement
                     {
                         MessageBox.Show("Request detail not found.");
                     }
-
                 }
                 else
                 {
-                    MessageBox.Show("Please select a request detail to update.");
+                    // Nếu là Import, kiểm tra Quantity trong WarehouseWine
+                    if (warehouseWine.Quantity < quantity)
+                    {
+                        MessageBox.Show("Insufficient quantity in warehouse for this request.");
+                        return;
+                    }
+                    warehouseWine.Quantity -= quantity;
+
+
+                    var request = _requestDAO.GetRequestById(requestDetailId);
+                    if (request != null)
+                    {
+                        request.Status = "Rejected";
+
+
+                        try
+                        {
+                            _requestDAO.UpdateRequest(request);
+                            MessageBox.Show("Request detail updated successfully.");
+                            LoadRequest(); // Refresh the request data grid
+
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show("Error updating request detail: " + ex.Message);
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("Request detail not found.");
+                    }
                 }
 
+                try
+                {
+                    // Cập nhật trong database
+                    _requestDetailDAO.UpdateRequestDetail(requestDetail); // Cập nhật RequestDetail
+                    _context.SaveChanges(); // Cập nhật WarehouseWine
+                    MessageBox.Show("Request detail and warehouse updated successfully.");
+                    LoadRequest(); // Tải lại danh sách request
+                    LoadWareHouseList(); // Tải lại danh sách warehouse
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error updating request detail: " + ex.Message);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Please select a request detail to update.");
             }
         }
+
+
 
 
 
@@ -183,7 +239,11 @@ namespace WineWarehouseManagement
             {
                 if (RequestsDataGrid.SelectedItem is RequestData selectedRequest)
                 {
-
+                    if (selectedRequest.Status != "Pending")
+                    {
+                        MessageBox.Show("This request cannot Accept/Reject.");
+                        return;
+                    }
                     int requestDetailId = selectedRequest.RequestDetailId; // Correct ID for RequestDetail
 
 
