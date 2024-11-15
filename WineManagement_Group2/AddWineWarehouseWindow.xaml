@@ -72,7 +72,7 @@
           ItemsSource="{Binding Locations}" DisplayMemberPath="Location" SelectedValuePath="Location"
           SelectedValue="{Binding SelectedLocation, Mode=TwoWay}"/>
 
-            <Button Grid.Column="1" Content="Search" Background="#800020" BorderBrush="#4C0013" HorizontalAlignment="Left" Height="38" Margin="256,25,0,0" Grid.Row="5" VerticalAlignment="Top" Width="87"/>
+            <Button Grid.Column="1" Content="Search" Background="#800020" BorderBrush="#4C0013" HorizontalAlignment="Left" Height="38" Margin="256,25,0,0" Grid.Row="5" VerticalAlignment="Top" Width="87" Click="SearchButton_Click"/>
 
         </Grid>
 

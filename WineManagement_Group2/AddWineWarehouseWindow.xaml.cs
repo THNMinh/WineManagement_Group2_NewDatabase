@@ -85,7 +85,7 @@ namespace WineWarehouseManagement
                 var wareHouseWineDetails = from ww in db.WarehouseWines
                                            join wh in db.WareHouses on ww.WareHouseId equals wh.WareHouseId
                                            join w in db.Wines on ww.WineId equals w.WineId
-                                           where wh.Status == "True"  // Chỉ lấy các kho đang hoạt động
+                                           where wh.Status == null  // Chỉ lấy các kho đang hoạt động
                                            select new
                                            {
                                                WarehouseWineId = ww.WarehouseWineId,
