@@ -10,17 +10,21 @@ namespace DataAccessLayer
         {
             using (var db = new WineManagement2Context())
             {
-                return db.Accounts.Find(id);
+                // Fetch the account with the given id only if its Status is true
+                return db.Accounts.SingleOrDefault(a => a.AccountId == id && a.Status == "true");
             }
         }
+
 
         public IEnumerable<Account> GetAllAccounts()
         {
             using (var db = new WineManagement2Context())
             {
-                return db.Accounts.ToList();
+                // Only fetch accounts with Status == "true"
+                return db.Accounts.Where(a => a.Status == "true").ToList();
             }
         }
+
 
         public void AddAccount(Account account)
         {
@@ -72,9 +76,11 @@ namespace DataAccessLayer
         {
             using (var db = new WineManagement2Context())
             {
-                return db.Accounts.Where(a => a.Role == role).ToList();
+                // Only fetch accounts with Status == "true"
+                return db.Accounts.Where(a => a.Role == role && a.Status == "true").ToList();
             }
         }
+
 
         public Account GetAccountMember(string email)
         {
