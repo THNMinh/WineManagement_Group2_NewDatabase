@@ -22,7 +22,7 @@ namespace DataAccessLayer
         {
             using (var db = new WineManagement2Context())
             {
-                return db.Suppliers.ToList();
+                return db.Suppliers.Where(w => w.Status == null).ToList();
             }
         }
 
