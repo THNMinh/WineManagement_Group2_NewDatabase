@@ -28,12 +28,21 @@ namespace DataAccessLayer
 
         public void AddAccount(Account account)
         {
-            using (var db = new WineManagement2Context())
+            using (var context = new WineManagement2Context())
             {
-                db.Accounts.Add(account);
-                db.SaveChanges();
+                // Kiểm tra Email đã tồn tại chưa
+                var existingAccount = context.Accounts.FirstOrDefault(a => a.Email == account.Email);
+                if (existingAccount != null)
+                {
+                    throw new Exception("Email already exists. Please use a different email.");
+                }
+
+                // Thêm tài khoản mới
+                context.Accounts.Add(account);
+                context.SaveChanges();
             }
         }
+
 
         public void UpdateAccount(Account account)
         {

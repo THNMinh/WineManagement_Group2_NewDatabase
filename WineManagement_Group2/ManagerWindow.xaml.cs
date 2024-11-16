@@ -1,6 +1,7 @@
 ﻿using BusinessObjects;
 using BusinessObjects.Entities;
 using DataAccessLayer;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -108,8 +109,51 @@ namespace WineWarehouseManagement
             StaffRoleComboBox.Text = string.Empty;
         }
 
+        private void ResetInputFieldsForCreate()
+        {
+            ClearStaffFields(); // Xóa tất cả các trường đầu vào
+            StaffDataGrid.SelectedItem = null; // Bỏ chọn dòng trong DataGrid
+        }
+
+
+        //private void CreateButton_Click(object sender, RoutedEventArgs e)
+        //{
+        //    if (string.IsNullOrWhiteSpace(StaffNameTextBox.Text) ||
+        //        string.IsNullOrWhiteSpace(StaffEmailTextBox.Text) ||
+        //        string.IsNullOrWhiteSpace(StaffPasswordBox.Password))
+        //    {
+        //        MessageBox.Show("Please fill in all required fields (Name, Email, and Password).", "Missing Information", MessageBoxButton.OK, MessageBoxImage.Warning);
+        //        return;
+        //    }
+
+        //    if (!IsValidGmail(StaffEmailTextBox.Text))
+        //    {
+        //        MessageBox.Show("Please enter a valid Gmail address (e.g., example@gmail.com).", "Invalid Email", MessageBoxButton.OK, MessageBoxImage.Warning);
+        //        return;
+        //    }
+
+        //    if (!IsEmailUnique(StaffEmailTextBox.Text))
+        //    {
+        //        MessageBox.Show("This email is already in use. Please use a different email address.", "Duplicate Email", MessageBoxButton.OK, MessageBoxImage.Warning);
+        //        return;
+        //    }
+
+        //    Account newStaff = new Account
+        //    {
+        //        Username = StaffNameTextBox.Text,
+        //        Email = StaffEmailTextBox.Text,
+        //        PasswordHash = StaffPasswordBox.Password,
+        //        Role = "Staff"
+        //    };
+
+        //    _accountDAO.AddAccount(newStaff);
+        //    LoadStaffList();
+        //    ClearStaffFields();
+        //}
+
         private void CreateButton_Click(object sender, RoutedEventArgs e)
         {
+            // Kiểm tra thông tin hợp lệ
             if (string.IsNullOrWhiteSpace(StaffNameTextBox.Text) ||
                 string.IsNullOrWhiteSpace(StaffEmailTextBox.Text) ||
                 string.IsNullOrWhiteSpace(StaffPasswordBox.Password))
@@ -130,18 +174,32 @@ namespace WineWarehouseManagement
                 return;
             }
 
+            // Tạo tài khoản mới
             Account newStaff = new Account
             {
                 Username = StaffNameTextBox.Text,
                 Email = StaffEmailTextBox.Text,
                 PasswordHash = StaffPasswordBox.Password,
-                Role = "Staff"
+                Role = "Staff",
+                Status = "true"
             };
-
-            _accountDAO.AddAccount(newStaff);
-            LoadStaffList();
-            ClearStaffFields();
+            try
+            {
+                // Thêm tài khoản mới
+                _accountDAO.AddAccount(newStaff);
+            LoadStaffList(); // Tải lại danh sách
+            ClearStaffFields(); // Xóa trường đầu vào sau khi tạo
+            MessageBox.Show("Staff created successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (DbUpdateException ex)
+            {
+                // Handle any other exceptions here
+                MessageBox.Show($"Error creating account: {ex.Message}");
+                ClearStaffFields(); // Xóa trường đầu vào sau khi tạo
+            }
         }
+
+
 
         private void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
@@ -192,17 +250,17 @@ namespace WineWarehouseManagement
         {
             if (StaffDataGrid.SelectedItem is Account selectedStaff)
             {
-
                 StaffNameTextBox.Text = selectedStaff.Username.ToString();
                 StaffEmailTextBox.Text = selectedStaff.Email;
-                StaffPasswordBox.Password = selectedStaff.PasswordHash; // Assuming you want to display this as well
-                StaffRoleComboBox.Text = selectedStaff.Role.ToString(); // Convert boolean to string
-
-
+                StaffPasswordBox.Password = selectedStaff.PasswordHash;
+                StaffRoleComboBox.Text = selectedStaff.Role?.ToString() ?? string.Empty;
             }
-
-
+            else
+            {
+                ClearStaffFields(); // Nếu không có lựa chọn, xóa các trường đầu vào
+            }
         }
+
 
 
         private void BacktoManagerHomePage_click(object sender, RoutedEventArgs e)

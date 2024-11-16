@@ -390,6 +390,18 @@ namespace WineWarehouseManagement
 
         }
 
+        private bool IsEmailUniqueForUpdate(string email, int supplierId)
+        {
+            return !_supplierDAO.GetAllSuppliers()
+                .Any(s => s.SupplierId != supplierId && s.Email != null && s.Email.Equals(email, StringComparison.OrdinalIgnoreCase));
+        }
+
+        private bool IsPhoneUniqueForUpdate(string phone, int supplierId)
+        {
+            return !_supplierDAO.GetAllSuppliers()
+                .Any(s => s.SupplierId != supplierId && s.Phone != null && s.Phone.Equals(phone, StringComparison.OrdinalIgnoreCase));
+        }
+
         private void UpdateSupplierButton_Click(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrWhiteSpace(SupplierNameTextBox.Text) ||
@@ -402,30 +414,37 @@ namespace WineWarehouseManagement
                 return;
             }
 
-
-            if (!IsEmailUnique(EmailTextBox.Text))
-            {
-                MessageBox.Show("This email is already in use. Please use a different email address.", "Duplicate Email", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-
-
             // Validate phone number
-            if (string.IsNullOrWhiteSpace(PhoneTextBox.Text) || !IsPhoneNumberValid(PhoneTextBox.Text) || PhoneTextBox.Text.Length != 10)
+            if (!IsPhoneNumberValid(PhoneTextBox.Text) || PhoneTextBox.Text.Length != 10)
             {
-                MessageBox.Show("Phone number must be filled, only contain digits, and be 10 digits long.", "Invalid Phone Number", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Phone number must only contain digits and be 10 digits long.", "Invalid Phone Number", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
-
-            if (!IsPhoneUnique(PhoneTextBox.Text))
-            {
-                MessageBox.Show("This phone number is already in use. Please use a different please.", "Duplicate Email", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-
 
             if (ManagerDataGrid.SelectedItem is Supplier selectedSupplier)
             {
+                // Check if the email has been changed
+                if (!selectedSupplier.Email.Equals(EmailTextBox.Text, StringComparison.OrdinalIgnoreCase))
+                {
+                    // If the email is changed, check if it already exists
+                    if (!IsEmailUniqueForUpdate(EmailTextBox.Text, selectedSupplier.SupplierId))
+                    {
+                        MessageBox.Show("This email is already in use by another supplier. Please use a different email address.", "Duplicate Email", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        return;
+                    }
+                }
+
+                // Check if the phone number has been changed
+                if (!selectedSupplier.Phone.Equals(PhoneTextBox.Text, StringComparison.OrdinalIgnoreCase))
+                {
+                    // If the phone number is changed, check if it already exists
+                    if (!IsPhoneUniqueForUpdate(PhoneTextBox.Text, selectedSupplier.SupplierId))
+                    {
+                        MessageBox.Show("This phone number is already in use by another supplier. Please use a different phone number.", "Duplicate Phone Number", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        return;
+                    }
+                }
+
                 // Update the supplier's properties with the new values
                 selectedSupplier.Name = SupplierNameTextBox.Text;
                 selectedSupplier.ContactPerson = ContactPersonTextBox.Text;
@@ -445,6 +464,7 @@ namespace WineWarehouseManagement
                 MessageBox.Show("Please select a supplier to update.");
             }
         }
+
 
         private void DeleteSupplierButton_Click(object sender, RoutedEventArgs e)
         {
@@ -521,7 +541,6 @@ namespace WineWarehouseManagement
             {
                 CategoryName = CategoryNameTextBox.Text,
                 Description = DescriptionTextBox.Text,
-                Status = "Active" // Optionally, set a default status
             };
 
             _categoryDAO.AddCategory(newCategory);

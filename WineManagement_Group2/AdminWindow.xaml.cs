@@ -63,25 +63,34 @@ namespace WineWarehouseManagement
                 return;
             }
 
+
             if (!IsEmailUnique(StaffEmailTextBox.Text))
             {
                 MessageBox.Show("This email is already in use. Please use a different email address.", "Duplicate Email", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
-
-            Account newStaff = new Account
+            try
             {
-                Username = StaffNameTextBox.Text,
-                Email = StaffEmailTextBox.Text,
-                PasswordHash = StaffPasswordBox.Password,
-                Role = "Staff"
-            };
+                // Tạo một đối tượng Account mới
+                Account newStaff = new Account
+                {
+                    Username = StaffNameTextBox.Text, // Có thể trùng
+                    Email = StaffEmailTextBox.Text,   // Phải là duy nhất
+                    PasswordHash = StaffPasswordBox.Password,
+                    Role = StaffRole.Text
+                };
 
-
-            _accountDAO.AddAccount(newStaff);
-            LoadStaffList();
-            ClearStaffFields();
+                _accountDAO.AddAccount(newStaff);
+                LoadStaffList();  // Tải lại danh sách nhân viên
+                ClearStaffFields();
+                MessageBox.Show("Staff created successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error creating staff: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
+
 
         private void UpdateStaffButton_Click(object sender, RoutedEventArgs e)
         {
